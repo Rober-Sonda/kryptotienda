@@ -110,7 +110,7 @@
 }
 
 .hud-tab:hover {
-  color: #fff;
+  color: var(--text-main);
   background-color: rgba(57, 255, 20, 0.1);
 }
 
@@ -139,7 +139,7 @@
 
 .hud-tab.active .hud-tab-deco {
   width: 100%;
-  background-color: #fff;
+  background-color: var(--text-main);
 }
 
 @keyframes hudGlitch {
@@ -203,7 +203,7 @@
 
 .hud-chip:hover {
   border-color: rgba(57, 255, 20, 0.5);
-  color: #fff;
+  color: var(--text-main);
 }
 
 .hud-chip.active {
