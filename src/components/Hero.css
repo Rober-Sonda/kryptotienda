@@ -1,7 +1,7 @@
 .hero {
   position: relative;
   min-height: 100vh;
-  min-height: 100svh; /* Fundamental para evitar pantallazo en mobile */
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,8 +142,7 @@
   .hero {
     background-attachment: scroll;
     background-position: center top;
-    /* En iOS, min-height con svh es la forma correcta */
-    min-height: 100svh;
+    min-height: 100dvh;
   }
   
   .hero-text {
