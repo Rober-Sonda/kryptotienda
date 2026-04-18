@@ -153,6 +153,7 @@
   overflow: hidden;
 }
 
+/* Ya no necesitamos inversión CSS forzada, usamos los nuevos assets nativos hiper-realistas subidos por el usuario */
 .mockup-base {
   width: 100%;
   height: 100%;
@@ -163,45 +164,32 @@
   z-index: 1;
 }
 
-/* For black t-shirts, we invert the white mockup and drop brightness so shadows cast naturally */
-.mockup-base.black {
-  filter: invert(1) brightness(0.15) contrast(1.2);
-}
-
-/* For white t-shirts, multiply blends the shirt folds with the design */
-.mockup-base.white {
-  mix-blend-mode: multiply;
-  opacity: 0.85;
-}
-
 .mockup-design {
-  width: 45%;   /* Scale the raw design to fit the chest */
+  width: 45%;
   height: auto;
   position: absolute;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  mix-blend-mode: normal; /* The design sits firmly on top of the black base, or under the white multiply base */
+  transition: all 0.3s ease;
 }
 
+/* Fusión de Tejido Textil Algorítmica */
+/* Si el diseño se estampa en remera NEGRA, usamos "screen": los fondos negros del diseño desaparecen magícamente fundiéndose con la tela */
+.virtual-mockup-container:has(.mockup-base.black) .mockup-design {
+  mix-blend-mode: screen;
+}
+
+/* Si el diseño se estampa en remera BLANCA, usamos "multiply": permite que las arrugas y sombras de la remera blanca sutilmente se filtren a través del diseño */
 .virtual-mockup-container:has(.mockup-base.white) .mockup-design {
-   /* If shirt is white, the design goes UNDER the shirt layers so folds cast over it */
-   z-index: 0; 
+  mix-blend-mode: multiply;
 }
 
-/* En dispositivos móviles, Chromium sufre gravemente de "continuous repainting" 
-   (parpadeo de pantalla y borrado de elementos al scrollear) si hay demasiados elementos 
-   usando mix-blend-mode o filtros pesados. Aquí los desactivamos en móvil. */
 @media (max-width: 768px) {
-  .mockup-base.black {
-    filter: none; /* Fallback: la remera se verá sin filtrar (blanca base) temporalmente en móvil o requerirá un asset oscuro dedicado en un futuro */
-    opacity: 0.9;
-  }
-  
-  .mockup-base.white {
-    mix-blend-mode: normal;
-    opacity: 0.95;
+  /* En móviles forzamos a normal si el rendering es lento, pero estos blends son livianos comparado a invert/backdrop */
+  .virtual-mockup-container .mockup-design {
+    mix-blend-mode: normal !important;
   }
 }
 

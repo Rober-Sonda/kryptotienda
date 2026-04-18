@@ -62,8 +62,8 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
         <div className="qv-image-section">
           <div className="glass-shield"></div>
           {product.mockupBg ? (
-            <div className="virtual-mockup-container" style={{ backgroundColor: product.mockupBg === 'black' ? '#111' : '#fff' }}>
-              <img src="/mockups/mockup-tshirt.png" alt="T-Shirt Mockup" className={`mockup-base ${product.mockupBg}`} draggable="false" />
+            <div className="virtual-mockup-container">
+              <img src={`/mockups/mockup-tshirt-${product.mockupBg}.png`} alt="T-Shirt Mockup" className={`mockup-base ${product.mockupBg}`} draggable="false" />
               <img src={product.image} alt={product.title} className="mockup-design no-drag" draggable="false" onContextMenu={e => e.preventDefault()} />
             </div>
           ) : (
