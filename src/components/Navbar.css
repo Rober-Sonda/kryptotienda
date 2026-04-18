@@ -10,6 +10,8 @@
   -webkit-backdrop-filter: blur(5px); /* iOS Safari */
   backdrop-filter: blur(5px);
   -webkit-tap-highlight-color: transparent; /* Quita destello azul al tocar en Android */
+  transform: translateZ(0); /* Hardware acceleration */
+  will-change: transform, background-color; /* Prevents global repaints */
 }
 
 .navbar.scrolled {
@@ -232,6 +234,13 @@
     border-top: 1px solid rgba(57, 255, 20, 0.2);
     -webkit-overflow-scrolling: touch; /* iOS smooth scroll */
     overflow-y: auto;
+  }
+  
+  .navbar, .navbar.scrolled {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    /* Para evitar que se vea transparente sin el blur, usamos mayor opacidad */
+    background-color: var(--nav-mobile-bg); 
   }
 
   .nav-links.open {

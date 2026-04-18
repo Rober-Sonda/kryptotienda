@@ -130,13 +130,16 @@ a:hover {
 }
 
 @media (max-width: 768px) {
-  /* En móviles, desactivar el blur para evitar crashes gráficos por "out of texture memory",
-     lo que causa la "pantalla negra" al hacer scroll, porque los teléfonos no soportan
-     tantos paneles con glassmorphism corriendo al mismo tiempo */
+  /* En móviles, desactivar TODOS los blurs para evitar reflows infinitos ("paint storms") 
+     y cuelgues del GPU al hacer scroll o cuando las imágenes se descargan "bit a bit" detrás 
+     de las transparencias. */
+  *, .navbar, .glass-panel, .quickview-overlay, .auth-modal-overlay, .cart-sidebar-overlay {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  
   .glass-panel {
     background: var(--bg-card-solid);
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
   }
 }
 
