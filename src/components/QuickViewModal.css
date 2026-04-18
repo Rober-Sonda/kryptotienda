@@ -23,7 +23,7 @@
 }
 
 .quickview-modal {
-  background: var(--bg-dark);
+  background: var(--bg-card);
   border: 1px solid var(--krypton-green-glow);
   box-shadow: 0 0 30px rgba(57, 255, 20, 0.15), inset 0 0 20px rgba(0, 0, 0, 0.5);
   border-radius: 12px;

@@ -55,11 +55,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mock
         </button>
       </div>
       </div>
-      <QuickViewModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        product={{id, title, image, price, mockupBg}} 
-      />
+      {isModalOpen && (
+        <QuickViewModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          product={{id, title, image, price, mockupBg}} 
+        />
+      )}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ShoppingCart, Ruler } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.tsx';
@@ -25,7 +25,18 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
   const { currentUser, setShowLoginPrompt } = useAuth();
   const { addToCart } = useCart();
 
-  if (!product) return null;
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  if (!product || !isOpen) return null;
 
   const handleAddToCart = () => {
     if (!currentUser) {
@@ -46,7 +57,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
   };
 
   return createPortal(
-    <div className={`quickview-overlay ${isOpen ? 'open' : ''}`} onClick={(e) => { if(e.target === e.currentTarget) onClose(); }}>
+    <div className={`quickview-overlay ${isOpen ? 'open' : ''}`} onClick={(e) => { e.stopPropagation(); if(e.target === e.currentTarget) onClose(); }}>
       <div className="quickview-modal">
         <div className="qv-image-section">
           <div className="glass-shield"></div>
@@ -108,7 +119,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
           </button>
         </div>
         
-        <button className="qv-close-btn" onClick={onClose}><X size={20} /></button>
+        <button className="qv-close-btn" onClick={(e) => { e.stopPropagation(); onClose(); }}><X size={20} /></button>
       </div>
     </div>,
     document.body
