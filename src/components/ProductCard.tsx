@@ -54,7 +54,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mock
           <ShoppingCart size={20} />
         </button>
       </div>
-      
+      </div>
       <QuickViewModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
