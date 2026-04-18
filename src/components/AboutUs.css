@@ -192,6 +192,9 @@
 }
 
 .epic-welcome {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
   text-align: center;
   font-family: var(--font-heading);
   font-size: 1.5rem !important;
@@ -199,6 +202,7 @@
   margin-top: 3.5rem !important;
   margin-bottom: 0 !important;
   line-height: 1.5 !important;
+  width: 100%;
 }
 
 /* Glitch Title Effect */
