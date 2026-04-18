@@ -27,7 +27,7 @@ const AboutUs: React.FC = () => {
               <div className="data-divider"></div>
               
               <p>
-                Y es exactamente eso en lo que nos hemos convertido. Nuestro nombre no es ninguna coincidencia. Al atravesar las puertas digitales de <span className="highlight-green">Krypton Tienda</span>, estás entrando en un santuario absoluto de la cultura pop, diseñado meticulosamente para irradiar esa misma frecuencia.
+                Y es exactamente eso en lo que nos hemos convertido. Nuestro nombre no es ninguna coincidencia. Al atravesar las puertas digitales de <span className="highlight-green" style={{fontFamily: 'var(--font-edo)', fontSize: '1.4em', fontWeight: 'normal', letterSpacing: '1px'}}>Krypton Tienda</span>, estás entrando en un santuario absoluto de la cultura pop, diseñado meticulosamente para irradiar esa misma frecuencia.
               </p>
               
               <p>

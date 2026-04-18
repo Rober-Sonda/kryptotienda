@@ -66,7 +66,7 @@ const StoreView: React.FC = () => {
           <span className="title-krypton">KRYPTON</span>
         </h1>
         <p className="krypton-lore" style={{ textAlign: 'center' }}>
-          Forjado en los confines del espacio, este ecosistema nació para que vistas y abraces tus mayores aficiones con orgullo. Entra, filtra tu especialidad, y descubre tu <strong>GRAN DEBILIDAD</strong>.
+          Forjado en los confines del espacio, este ecosistema nació para que vistas y abraces tus mayores aficiones con orgullo. Entra, filtra tu especialidad, y descubre tu <strong style={{fontFamily: 'var(--font-edo)', fontSize: '1.4em', fontWeight: 'normal', color: 'var(--krypton-green)', letterSpacing: '1px', textShadow: '0 0 10px rgba(57, 255, 20, 0.4)'}}>GRAN DEBILIDAD</strong>.
         </p>
       </div>
       
