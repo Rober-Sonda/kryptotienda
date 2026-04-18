@@ -48,8 +48,6 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
   return createPortal(
     <div className={`quickview-overlay ${isOpen ? 'open' : ''}`} onClick={(e) => { if(e.target === e.currentTarget) onClose(); }}>
       <div className="quickview-modal">
-        <button className="qv-close-btn" onClick={onClose}><X size={20} /></button>
-        
         <div className="qv-image-section">
           <div className="glass-shield"></div>
           {product.mockupBg ? (
@@ -109,6 +107,8 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
             <ShoppingCart size={22} /> Equipar al Carrito
           </button>
         </div>
+        
+        <button className="qv-close-btn" onClick={onClose}><X size={20} /></button>
       </div>
     </div>,
     document.body
