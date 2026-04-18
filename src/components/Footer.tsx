@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Phone, Mail, Share2, MessageCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer: React.FC = () => {
@@ -15,18 +16,18 @@ const Footer: React.FC = () => {
           </div>
           <p className="footer-slogan">Descubre tu gran debilidad.</p>
           <div className="social-links">
-            <a href="#" className="social-link" aria-label="Compartir"><Share2 size={22} /></a>
-            <a href="#" className="social-link" aria-label="Chat"><MessageCircle size={22} /></a>
+            <a href="#" onClick={(e) => e.preventDefault()} className="social-link" aria-label="Compartir"><Share2 size={22} /></a>
+            <a href="#" onClick={(e) => e.preventDefault()} className="social-link" aria-label="Chat"><MessageCircle size={22} /></a>
           </div>
         </div>
         
         <div className="footer-links-group">
           <h4 className="footer-title">Categorías</h4>
           <ul className="footer-links">
-            <li><a href="#anime">Anime</a></li>
-            <li><a href="#retro">Videojuegos Clásicos</a></li>
-            <li><a href="#gym">Gym & Fitness</a></li>
-            <li><a href="#simpsons">Los Simpsons</a></li>
+            <li><Link to="/store?category=anime">Anime</Link></li>
+            <li><Link to="/store?category=retro">Videojuegos Clásicos</Link></li>
+            <li><Link to="/store?category=gym">Gym & Fitness</Link></li>
+            <li><Link to="/store?category=simpsons">Los Simpsons</Link></li>
           </ul>
         </div>
         

@@ -65,6 +65,8 @@ html {
   scroll-behavior: smooth;
   width: 100%;
   background-color: var(--bg-dark);
+  overscroll-behavior-y: none !important;
+  touch-action: manipulation;
   /* Remove overflow-x from html to prevent iOS touch scroll lock lockup */
 }
 
@@ -74,8 +76,10 @@ body {
   background-color: var(--bg-dark);
   color: var(--text-main);
   overflow-x: hidden; /* Required here to stop horizontal overflow */
-  overscroll-behavior-y: none; /* Disables Pull-to-Refresh reloading the page */
+  overscroll-behavior-y: none !important; /* Disables Pull-to-Refresh reloading the page */
+  touch-action: manipulation; /* Prevents 300ms delay and double-tap zoom iOS bugs */
   position: relative;
+  -webkit-overflow-scrolling: touch; /* Forces native momentum scrolling on iOS */
 }
 
 h1, h2, h3, h4, h5, h6 {
