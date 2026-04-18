@@ -65,7 +65,7 @@ html {
   scroll-behavior: smooth;
   width: 100%;
   background-color: var(--bg-dark);
-  overflow-x: hidden;
+  /* Remove overflow-x from html to prevent iOS touch scroll lock lockup */
 }
 
 body {
@@ -73,7 +73,8 @@ body {
   width: 100%;
   background-color: var(--bg-dark);
   color: var(--text-main);
-  overflow-x: hidden;
+  overflow-x: hidden; /* Required here to stop horizontal overflow */
+  overscroll-behavior-y: none; /* Disables Pull-to-Refresh reloading the page */
   position: relative;
 }
 
