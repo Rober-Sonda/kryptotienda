@@ -223,3 +223,49 @@
     max-height: 22dvh;
   }
 }
+
+/* ==============================================================
+   LIGHT MODE (MODO CLARO) SYNCHRONIZATION
+   ============================================================== */
+[data-theme="light"] .quickview-overlay {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="light"] .quickview-modal {
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="light"] .qv-close-btn {
+  background: rgba(255, 255, 255, 0.8);
+  color: #000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+[data-theme="light"] .qv-image-section {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .qv-price {
+  color: var(--text-main);
+}
+
+[data-theme="light"] .size-btn {
+  color: var(--text-main);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .size-btn.selected {
+  background: rgba(57, 255, 20, 0.15);
+  color: var(--text-main);
+  border-color: var(--krypton-green);
+  text-shadow: none;
+}
+
+[data-theme="light"] .size-guide {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .size-guide-table th, 
+[data-theme="light"] .size-guide-table td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
