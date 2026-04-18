@@ -281,3 +281,47 @@
     letter-spacing: 0;
   }
 }
+
+/* ==============================================================
+   LIGHT MODE (MODO CLARO) SYNCHRONIZATION
+   ============================================================== */
+[data-theme="light"] .hud-tab-container {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .hud-tab {
+  background-color: rgba(240, 240, 240, 0.8);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .hud-tab:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-main);
+}
+
+[data-theme="light"] .hud-tab.active {
+  background-color: var(--krypton-green);
+  border-color: var(--krypton-green);
+  color: #000;
+}
+
+[data-theme="light"] .hud-chip {
+  border-color: rgba(0, 0, 0, 0.15);
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .hud-chip:hover {
+  border-color: rgba(0, 0, 0, 0.3);
+  color: var(--text-main);
+}
+
+[data-theme="light"] .hud-chip.active {
+  background: rgba(57, 255, 20, 0.15);
+  border-color: var(--krypton-green);
+  color: #000;
+}
+
+[data-theme="light"] .chip-indicator {
+  background-color: rgba(0, 0, 0, 0.2);
+}
