@@ -1,131 +1,332 @@
-.about-krypton-section {
+/* ==============================================================
+   CINEMATIC ABOUT KRYPTON SECTION
+   ============================================================== */
+
+.cinematic-about-section {
+  position: relative;
   width: 100%;
-  position: relative;
-}
-
-.about-krypton-card {
-  display: flex;
-  flex-direction: column;
-  background: var(--glass-bg, rgba(10, 10, 10, 0.8));
-  border: 1px solid var(--glass-border, rgba(57, 255, 20, 0.15));
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 0 40px rgba(57, 255, 20, 0.05), inset 0 0 20px rgba(0, 0, 0, 0.4);
-}
-
-@media (min-width: 992px) {
-  .about-krypton-card {
-    flex-direction: row;
-    align-items: stretch;
-  }
-}
-
-.about-krypton-content {
-  flex: 1;
-  padding: 3rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-@media (min-width: 992px) {
-  .about-krypton-content {
-    padding: 4rem;
-  }
-}
-
-.about-title {
-  font-family: var(--font-edo);
-  font-size: 2.8rem;
-  margin-bottom: 2rem;
-  text-align: left;
-  line-height: 1.1;
-}
-
-.about-title span {
-  color: var(--krypton-green);
-  text-shadow: 0 0 15px rgba(57, 255, 20, 0.6);
-}
-
-.about-text-glow p {
-  color: var(--text-muted);
-  font-family: var(--font-body);
-  font-size: 1.1rem;
-  line-height: 1.7;
-  margin-bottom: 1.5rem;
-  text-shadow: none; /* Mejor legibilidad sin sombras forzadas en modo claro */
-}
-
-.about-text-glow strong {
-  color: var(--krypton-green);
-  font-weight: bold;
-}
-
-.epic-punchline {
-  border-left: 4px solid var(--krypton-green);
-  padding-left: 1.5rem;
-  font-style: italic;
-  font-size: 1.2rem !important;
-  color: var(--text-main) !important;
-  background: linear-gradient(90deg, rgba(57,255,20,0.08) 0%, transparent 100%);
-  margin: 2rem 0 !important;
-}
-
-.epic-welcome {
-  font-family: var(--font-heading);
-  font-size: 1.3rem !important;
-  color: var(--krypton-green) !important;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.about-krypton-visual {
-  flex: 1;
-  position: relative;
-  min-height: 300px;
-  overflow: hidden;
+  min-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
+  overflow: hidden;
+  padding: 4rem 0;
 }
 
-.meteor-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  background: var(--krypton-green);
-  filter: blur(100px);
-  opacity: 0.3;
-  z-index: 1;
-  animation: pulse-meteor 4s infinite alternate;
-}
-
-@keyframes pulse-meteor {
-  0% { opacity: 0.2; transform: translate(-50%, -50%) scale(1); }
-  100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.5); }
-}
-
-.about-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* --- IMMERSIVE BACKGROUND --- */
+.about-ambient-background {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 2;
-  opacity: 0.7;
-  mix-blend-mode: screen;
-  mask-image: linear-gradient(to right, transparent, black 20%);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 20%);
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
-@media (max-width: 991px) {
-  .about-image {
-    mask-image: linear-gradient(to bottom, transparent, black 20%);
-    -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%);
+.about-image-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/logo-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Parallax Effect on Desktop */
+  opacity: 0.5;
+  filter: blur(2px) contrast(1.2);
+  transform: scale(1.05); /* Prevents blur bleeding */
+}
+
+.about-gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Deep dark vignette and green radioactive subtle glow from bottom */
+  background: radial-gradient(circle at center, transparent 0%, var(--bg-dark) 90%),
+              linear-gradient(to top, rgba(10, 10, 10, 1) 0%, rgba(57, 255, 20, 0.05) 50%, rgba(10, 10, 10, 1) 100%);
+}
+
+/* --- CONTENT CONTAINER --- */
+.about-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* --- FLOATING GLASS TERMINAL CARD --- */
+.krypton-glass-terminal {
+  background: rgba(10, 12, 14, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+              0 0 30px rgba(57, 255, 20, 0.1);
+  width: 100%;
+  max-width: 900px;
+  overflow: hidden;
+  transform: translateY(0);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease;
+}
+
+.krypton-glass-terminal:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+              0 0 40px rgba(57, 255, 20, 0.15);
+  border-color: rgba(57, 255, 20, 0.4);
+}
+
+/* --- TERMINAL MAC-STYLE HEADER --- */
+.terminal-header {
+  background: rgba(5, 6, 7, 0.9);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.15);
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.terminal-dot.red { background-color: #ff5f56; }
+.terminal-dot.yellow { background-color: #ffbd2e; }
+.terminal-dot.green { 
+  background-color: var(--krypton-green); 
+  box-shadow: 0 0 8px var(--krypton-green);
+}
+
+.terminal-title {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  opacity: 0.7;
+}
+
+/* --- TERMINAL TYPOGRAPHY & BODY --- */
+.terminal-body {
+  padding: 3rem 4rem;
+}
+
+.about-title-main {
+  font-family: var(--font-edo);
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  line-height: 1;
+}
+
+.about-title-main span {
+  color: var(--krypton-green);
+  text-shadow: 0 0 20px var(--krypton-green-glow);
+}
+
+.about-text-glow p {
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+  opacity: 0.9;
+}
+
+.about-text-glow strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.highlight-green {
+  color: var(--krypton-green);
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
+}
+
+.data-divider {
+  width: 50px;
+  height: 2px;
+  background: var(--krypton-green);
+  margin: 2.5rem auto;
+  box-shadow: 0 0 10px var(--krypton-green);
+  border-radius: 2px;
+}
+
+/* Epic Callout Box */
+.epic-punchline {
+  background: linear-gradient(90deg, rgba(57,255,20,0.1) 0%, rgba(0,0,0,0.2) 100%);
+  border-left: 4px solid var(--krypton-green);
+  padding: 1.5rem 2rem;
+  margin: 2.5rem 0;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.punchline-icon {
+  font-style: normal;
+  font-size: 1.5rem;
+  margin-top: 2px;
+}
+
+.epic-punchline p {
+  margin: 0;
+  font-style: italic;
+  font-size: 1.1rem;
+  opacity: 1;
+}
+
+.epic-welcome {
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 1.5rem !important;
+  color: var(--text-muted) !important;
+  margin-top: 3rem !important;
+  margin-bottom: 0 !important;
+  line-height: 1.5 !important;
+}
+
+/* Glitch Title Effect */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+  color: var(--krypton-green);
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 10px;
+  text-shadow: 0 0 15px var(--krypton-green-glow);
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch-text::before {
+  color: #0ff;
+  z-index: -1;
+  transform: translate(-3px, 2px);
+  animation: glitch-anim 3s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  color: #f0f;
+  z-index: -2;
+  transform: translate(3px, -2px);
+  animation: glitch-anim 2.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
+  20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+  40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+  60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+  80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
+  100% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -1px); }
+}
+
+/* ==============================================================
+   MOBILE RESPONSIVENESS
+   ============================================================== */
+
+@media (max-width: 768px) {
+  .cinematic-about-section {
+    padding: 2rem 1rem;
+    min-height: auto;
+  }
+  
+  .about-ambient-background {
+    /* Desactivar Parallax en móvil para mejor rendimiento */
+    background-attachment: scroll; 
+  }
+  
+  .about-image-layer {
+    background-attachment: scroll;
+    opacity: 0.3; /* Imagen más suave en móvil para priorizar lectura */
+  }
+
+  .krypton-glass-terminal {
+    backdrop-filter: blur(20px); /* Más blur para celular porque la imagen está detrás */
+    border-radius: 16px;
+  }
+
+  .terminal-body {
+    padding: 2rem 1.5rem;
+  }
+
+  .about-title-main {
+    font-size: 2.5rem;
+  }
+
+  .about-text-glow p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    text-align: justify;
+  }
+
+  .epic-punchline {
+    padding: 1rem;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-left: none;
+    border-top: 3px solid var(--krypton-green);
+    background: linear-gradient(180deg, rgba(57,255,20,0.1) 0%, transparent 100%);
+  }
+
+  .punchline-icon {
+    margin: 0;
+  }
+
+  .glitch-text {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .terminal-header {
+    padding: 10px 15px;
+  }
+  
+  .terminal-title {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .terminal-body {
+    padding: 1.5rem 1rem;
+  }
+
+  .about-title-main {
+    font-size: 2.2rem;
+  }
+
+  .about-text-glow p {
+    font-size: 1rem;
   }
 }
