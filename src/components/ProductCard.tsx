@@ -18,7 +18,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mock
     setIsModalOpen(true);
   };
   return (
-    <div className="product-card glass-panel protected-media" onClick={handleOpenQuickView} style={{ cursor: 'pointer' }}>
+    <>
+      <div className="product-card glass-panel protected-media" onClick={handleOpenQuickView} style={{ cursor: 'pointer' }}>
       <div className="product-image-container">
         {/* Usamos un div superpuesto transparente para evitar el arrastre y click derecho incluso en dispositivos móviles */}
         <div className="glass-shield"></div>
@@ -53,14 +54,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mock
           <ShoppingCart size={20} />
         </button>
       </div>
-
+      
       <QuickViewModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         product={{id, title, image, price, mockupBg}} 
       />
-    </div>
+    </>
   );
 };
-
 export default React.memo(ProductCard);

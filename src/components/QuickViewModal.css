@@ -194,6 +194,8 @@
   }
   .qv-image-section {
     flex: 0 0 auto; /* No crecer, no encoger */
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
   .qv-image {
     max-height: 30vh;

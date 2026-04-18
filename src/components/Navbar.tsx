@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
     <header className={`navbar ${scrolled ? 'scrolled glass-panel' : ''}`}>
       <div className="container nav-container">
         <Link to="/" className="logo" onClick={() => window.scrollTo(0,0)}>
-          <img src="/logo1.jpg" alt="Krypton Logo" className="logo-img" />
+          <img src="/favicon.svg" alt="Krypton Logo" className="logo-img" />
           <span className="logo-text">KRYPTON</span>
         </Link>
 
