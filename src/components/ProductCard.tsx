@@ -24,8 +24,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mock
         <div className="glass-shield"></div>
         {mockupBg ? (
           <div className="virtual-mockup-container" style={{ backgroundColor: mockupBg === 'black' ? '#111' : '#fff' }}>
-            <img src="/mockups/mockup-tshirt.png" alt="T-Shirt Mockup" className={`mockup-base ${mockupBg}`} draggable="false" />
-            <img src={image} alt={title} className="mockup-design no-drag" draggable="false" onContextMenu={(e) => e.preventDefault()} />
+            <img src="/mockups/mockup-tshirt.png" alt="T-Shirt Mockup" className={`mockup-base ${mockupBg}`} draggable="false" loading="lazy" decoding="async" />
+            <img src={image} alt={title} className="mockup-design no-drag" draggable="false" onContextMenu={(e) => e.preventDefault()} loading="lazy" decoding="async" />
           </div>
         ) : (
           <img 
@@ -33,6 +33,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mock
             alt={title} 
             className="product-image no-drag"
             draggable="false"
+            loading="lazy"
+            decoding="async"
             onContextMenu={(e) => e.preventDefault()}
           />
         )}
@@ -63,4 +65,4 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mock
   );
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);

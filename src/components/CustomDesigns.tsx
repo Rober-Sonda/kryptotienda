@@ -146,7 +146,7 @@ const CustomDesigns: React.FC = () => {
                   {previewUrl ? (
                     <div className="file-preview-wrapper" onClick={(e) => e.stopPropagation()}>
                       {file?.type.includes('image') ? (
-                        <img src={previewUrl} alt="Vista Previa" className="preview-thumbnail" />
+                        <img src={previewUrl} alt="Vista Previa" className="preview-thumbnail" loading="lazy" decoding="async" />
                       ) : (
                         <FileImage size={40} className="text-krypton" />
                       )}

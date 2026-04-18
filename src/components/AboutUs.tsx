@@ -30,7 +30,7 @@ const AboutUs: React.FC = () => {
           </div>
           <div className="about-krypton-visual">
             <div className="meteor-glow"></div>
-            <img src="/logo-bg.jpg" alt="El Núcleo de Krypton" className="about-image" />
+            <img src="/logo-bg.jpg" alt="El Núcleo de Krypton" className="about-image" loading="lazy" decoding="async" />
           </div>
         </div>
       </div>

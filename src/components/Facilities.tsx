@@ -70,6 +70,8 @@ const Facilities: React.FC = () => {
               alt={item.title} 
               className="facility-image no-drag"
               draggable="false"
+              loading="lazy"
+              decoding="async"
               onContextMenu={(e) => e.preventDefault()}
             />
             <div className="facility-overlay">
