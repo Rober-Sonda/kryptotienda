@@ -1,0 +1,130 @@
+.about-krypton-section {
+  width: 100%;
+  position: relative;
+}
+
+.about-krypton-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.15);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(57, 255, 20, 0.05), inset 0 0 20px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+@media (min-width: 992px) {
+  .about-krypton-card {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.about-krypton-content {
+  flex: 1;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (min-width: 992px) {
+  .about-krypton-content {
+    padding: 4rem;
+  }
+}
+
+.about-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.about-title span {
+  color: var(--krypton-green);
+  text-shadow: 0 0 15px rgba(57, 255, 20, 0.6);
+}
+
+.about-text-glow p {
+  color: #ccc;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.about-text-glow strong {
+  color: var(--krypton-green);
+  font-weight: bold;
+}
+
+.epic-punchline {
+  border-left: 4px solid var(--krypton-green);
+  padding-left: 1.5rem;
+  font-style: italic;
+  font-size: 1.2rem !important;
+  color: #fff !important;
+  background: linear-gradient(90deg, rgba(57,255,20,0.1) 0%, transparent 100%);
+  margin: 2rem 0 !important;
+}
+
+.epic-welcome {
+  font-family: var(--font-heading);
+  font-size: 1.3rem !important;
+  color: var(--krypton-green) !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.about-krypton-visual {
+  flex: 1;
+  position: relative;
+  min-height: 300px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.meteor-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: var(--krypton-green);
+  filter: blur(100px);
+  opacity: 0.3;
+  z-index: 1;
+  animation: pulse-meteor 4s infinite alternate;
+}
+
+@keyframes pulse-meteor {
+  0% { opacity: 0.2; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.5); }
+}
+
+.about-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  opacity: 0.7;
+  mix-blend-mode: screen;
+  mask-image: linear-gradient(to right, transparent, black 20%);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 20%);
+}
+
+@media (max-width: 991px) {
+  .about-image {
+    mask-image: linear-gradient(to bottom, transparent, black 20%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%);
+  }
+}

@@ -1,0 +1,170 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh; /* Fundamental para evitar pantallazo en mobile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 80px;
+  
+  /* IMPORTANTE: background-attachment:fixed está ROTO en iOS Safari y Android WebView.
+     Usamos background-attachment:scroll siempre para máxima compatibilidad móvil. */
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(10, 10, 10, 0.85),
+    rgba(10, 10, 10, 0.5)
+  ), url('/hero-definitivo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: scroll;
+}
+
+/* Las clases hero-bg y hero-overlay fueron eliminadas y asimiladas por .hero */
+
+.hero-bottom-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(to top, var(--bg-dark), transparent);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-text.text-center {
+  max-width: 800px;
+  animation: slideUp 1s cubic-bezier(0.1, 0.8, 0.2, 1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+}
+
+.hero-title {
+  font-size: 5.5rem;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+.text-light {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.text-krypton {
+  color: var(--krypton-green);
+  font-weight: 900;
+  text-shadow: 0 0 15px var(--krypton-green-glow);
+  display: inline-block;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.hero-actions .neon-btn {
+  background-color: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--krypton-green);
+}
+
+.hero-actions .neon-btn:hover {
+  background-color: var(--krypton-green);
+  color: var(--bg-dark);
+  box-shadow: 0 0 20px var(--krypton-green-glow);
+}
+
+.hero-actions .neon-btn.primary {
+  background-color: var(--krypton-green);
+  color: var(--bg-dark);
+  box-shadow: 0 0 15px var(--krypton-green-glow);
+}
+
+.hero-actions .neon-btn.primary:hover {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: var(--bg-dark);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+}
+
+.neon-btn.secondary {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: #a0a0a0;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.neon-btn.secondary:hover {
+  border-color: var(--krypton-green);
+  color: var(--krypton-green);
+  background-color: transparent;
+  box-shadow: 0 0 10px var(--krypton-green-glow);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    background-attachment: scroll;
+    background-position: center top;
+    /* En iOS, min-height con svh es la forma correcta */
+    min-height: 100svh;
+  }
+  
+  .hero-text {
+    padding: 2rem;
+  }
+  
+  .hero-title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 1rem;
+  }
+  .hero-actions .neon-btn {
+    width: 100%;
+  }
+}

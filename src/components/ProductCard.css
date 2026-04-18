@@ -1,0 +1,242 @@
+.product-card {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), 0 0 15px var(--krypton-green-glow);
+  border-color: rgba(57, 255, 20, 0.3);
+}
+
+.product-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: #111;
+}
+
+.glass-shield {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: transparent;
+  /* En móvil, el glass-shield NO debe bloquear eventos de toque */
+  pointer-events: none;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.1);
+}
+
+.product-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 20; /* Por encima del escudo de protección para permitir click en el botón */
+}
+
+.product-card:hover .product-overlay {
+  opacity: 1;
+}
+
+.add-to-cart-btn {
+  background-color: var(--krypton-green);
+  color: var(--bg-dark);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  font-family: var(--font-heading);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  pointer-events: auto; /* IMPORTANTE: permitir clicks sobre el escudo anti-drag */
+}
+
+.product-card:hover .add-to-cart-btn {
+  transform: translateY(0);
+}
+
+.add-to-cart-btn:hover {
+  box-shadow: 0 0 15px var(--bg-dark);
+  background-color: #ffffff;
+}
+
+.product-info {
+  padding: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.product-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-cart-btn {
+  display: none; /* Oculto en desktop */
+  background: var(--krypton-green);
+  color: var(--bg-dark);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px var(--krypton-green-glow);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.mobile-cart-btn:active {
+  transform: scale(0.9);
+  background: #ffffff;
+}
+
+.product-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.product-price {
+  font-family: var(--font-heading);
+  color: var(--krypton-green);
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+/* CSS Virtual Mockup Engine */
+.virtual-mockup-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.mockup-base {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* For black t-shirts, we invert the white mockup and drop brightness so shadows cast naturally */
+.mockup-base.black {
+  filter: invert(1) brightness(0.15) contrast(1.2);
+}
+
+/* For white t-shirts, multiply blends the shirt folds with the design */
+.mockup-base.white {
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+
+.mockup-design {
+  width: 45%;   /* Scale the raw design to fit the chest */
+  height: auto;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  mix-blend-mode: normal; /* The design sits firmly on top of the black base, or under the white multiply base */
+}
+
+.virtual-mockup-container:has(.mockup-base.white) .mockup-design {
+   /* If shirt is white, the design goes UNDER the shirt layers so folds cast over it */
+   z-index: 0; 
+}
+
+/* En dispositivos móviles, Chromium sufre gravemente de "continuous repainting" 
+   (parpadeo de pantalla y borrado de elementos al scrollear) si hay demasiados elementos 
+   usando mix-blend-mode o filtros pesados. Aquí los desactivamos en móvil. */
+@media (max-width: 768px) {
+  .mockup-base.black {
+    filter: none; /* Fallback: la remera se verá sin filtrar (blanca base) temporalmente en móvil o requerirá un asset oscuro dedicado en un futuro */
+    opacity: 0.9;
+  }
+  
+  .mockup-base.white {
+    mix-blend-mode: normal;
+    opacity: 0.95;
+  }
+}
+
+/* =================================================================
+   CORRECCIONES PARA DISPOSITIVOS TÁCTILES (móvil / tablet)
+   En touch devices no existe :hover, por lo que los botones nunca
+   aparecerían. Escondemos el overlay para no tapar la foto y mostramos el botón circular.
+   ================================================================= */
+@media (hover: none) and (pointer: coarse) {
+  .product-overlay {
+    display: none !important; /* No bloqueamos la imagen */
+  }
+
+  .mobile-cart-btn {
+    display: flex; /* Mostramos el botón dedicado al costado del precio */
+  }
+
+  .product-card:hover .product-image {
+    transform: none; /* Evitamos que se quede agrandado al tocar */
+  }
+}
+
+/* Breakpoint extra pequeño para teléfonos muy chicos (< 360px) */
+@media (max-width: 360px) {
+  .product-info {
+    padding: 0.8rem;
+  }
+  .mobile-cart-btn {
+    width: 35px;
+    height: 35px;
+  }
+  .product-title {
+    font-size: 0.95rem;
+  }
+  .product-price {
+    font-size: 1rem;
+  }
+}

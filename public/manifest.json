@@ -1,0 +1,21 @@
+{
+  "name": "Krypton Tienda",
+  "short_name": "Krypton",
+  "description": "Descubre tu gran debilidad. Indumentaria geek, anime y fitness.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#39ff14",
+  "icons": [
+    {
+      "src": "/logo1.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/logo1.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

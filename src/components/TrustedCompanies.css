@@ -1,0 +1,114 @@
+.trusted-companies-section {
+  padding: 4rem 0;
+  background: var(--bg-dark);
+  border-top: 1px solid rgba(57, 255, 20, 0.1);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.trusted-header {
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.trusted-subtitle {
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: 2rem;
+  /* Mascara para que se desvanezca a los costados */
+  mask-image: linear-gradient(
+    to right,
+    hsl(0 0% 0% / 0),
+    hsl(0 0% 0% / 1) 10%,
+    hsl(0 0% 0% / 1) 90%,
+    hsl(0 0% 0% / 0)
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    hsl(0 0% 0% / 0),
+    hsl(0 0% 0% / 1) 10%,
+    hsl(0 0% 0% / 1) 90%,
+    hsl(0 0% 0% / 0)
+  );
+}
+
+.marquee-content {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 100%;
+  gap: 4rem;
+  /* ATENCION: No usar will-change: transform aqui. Cranquea Chrome Android (GPU Black Screen)
+     porque el contenedor es demasiado ancho para la mem de textura movil */
+  animation: scroll-left 40s linear infinite;
+}
+
+/* Solo pausar al hover en dispositivos con mouse (no touch) */
+@media (hover: hover) and (pointer: fine) {
+  .marquee-container:hover .marquee-content {
+    animation-play-state: paused;
+  }
+}
+
+.marquee-item {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.marquee-item:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.company-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  white-space: nowrap;
+}
+
+.company-logo svg {
+  color: var(--krypton-green);
+}
+
+@keyframes scroll-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .company-logo {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+  }
+  
+  .marquee-content {
+    animation-duration: 30s;
+  }
+}
