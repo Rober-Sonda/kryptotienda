@@ -156,7 +156,7 @@ const CartSidebar: React.FC = () => {
               ) : (
                 items.map(item => (
                   <div key={item.cartItemId} className="cart-item">
-                    <img src={item.image} alt={item.title} className="cart-item-image no-drag" loading="lazy" decoding="async" />
+                    <img src={item.image} alt={item.title} className="cart-item-image no-drag" />
                     <div className="cart-item-details">
                       <h4>{item.title} {item.size ? `(Talle: ${item.size})` : ''}</h4>
                       <p className="cart-item-price">{item.price}</p>
