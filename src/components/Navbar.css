@@ -42,6 +42,7 @@
   border-radius: 8px;
   object-fit: cover;
   box-shadow: 0 0 10px var(--krypton-green-glow);
+  background-color: var(--bg-dark); /* Fondo oscuro forzado para contraste en modo claro */
 }
 
 .logo-text {
