@@ -57,6 +57,8 @@
   color: var(--text-main);
   cursor: pointer;
   transition: color 0.2s;
+  position: relative;
+  z-index: 9999;
 }
 
 .close-btn:hover {
