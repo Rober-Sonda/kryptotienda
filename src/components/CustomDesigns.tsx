@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Upload, MessageCircle, LogIn, FileImage, Loader2 } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Upload, MessageCircle, LogIn, FileImage, Loader2, ChevronDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.tsx';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -16,6 +16,28 @@ const CustomDesigns: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
+  const productOptions = [
+    { value: "Remera", label: "Remera Sublimada / DTF" },
+    { value: "Buzo", label: "Buzo" },
+    { value: "Gorra", label: "Gorra" },
+    { value: "Taza", label: "Taza" },
+    { value: "Stickers", label: "Stickers / Calcos" },
+    { value: "Otro", label: "Otro Producto" }
+  ];
+
+  // Close custom dropdown when clicking outside
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -86,16 +108,33 @@ const CustomDesigns: React.FC = () => {
         ) : (
           <form className="custom-request-form" onSubmit={handleSubmit}>
             <div className="form-grid">
-              <div className="form-group">
+              <div className="form-group" ref={dropdownRef}>
                 <label>Tipo de Prenda/Producto</label>
-                <select value={productType} onChange={(e) => setProductType(e.target.value)} required>
-                  <option value="Remera">Remera Sublimada / DTF</option>
-                  <option value="Buzo">Buzo</option>
-                  <option value="Gorra">Gorra</option>
-                  <option value="Taza">Taza</option>
-                  <option value="Stickers">Stickers / Calcos</option>
-                  <option value="Otro">Otro Producto</option>
-                </select>
+                <div className="custom-select-container">
+                  <div 
+                    className={`custom-select-trigger ${isDropdownOpen ? 'open' : ''}`}
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                    <span>{productOptions.find(opt => opt.value === productType)?.label || 'Seleccionar...'}</span>
+                    <ChevronDown size={18} className={`chevron-icon ${isDropdownOpen ? 'rotated' : ''}`} />
+                  </div>
+                  {isDropdownOpen && (
+                    <ul className="custom-select-options fade-in">
+                      {productOptions.map(opt => (
+                        <li 
+                          key={opt.value} 
+                          className={productType === opt.value ? 'selected' : ''}
+                          onClick={() => {
+                            setProductType(opt.value);
+                            setIsDropdownOpen(false);
+                          }}
+                        >
+                          {opt.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
 
               <div className="form-group">
