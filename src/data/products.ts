@@ -10,16 +10,16 @@ export interface Product {
 
 export const productsData: Product[] = [
   // Anime
-  { id: 1, title: 'Attack on Titan Elite', image: '/anime-aot.png', price: '$15.99', category: 'anime', subcategory: 'Shonen', mockupBg: 'black' },
-  { id: 2, title: 'Demon Slayer Spirit', image: '/anime-demon.png', price: '$18.50', category: 'anime', subcategory: 'Shonen', mockupBg: 'white' },
-  { id: 3, title: 'Naruto Shippuden', image: '/anime-naruto.png', price: '$14.00', category: 'anime', subcategory: 'Clásicos', mockupBg: 'black' },
-  { id: 4, title: 'Jujutsu Kaisen', image: '/anime-jjk.png', price: '$22.00', category: 'anime', subcategory: 'Modernos', mockupBg: 'black' },
+  { id: 1, title: 'Attack on Titan Elite', image: '/anime-aot.png', price: '$15.99', category: 'anime', subcategory: 'Shonen' },
+  { id: 2, title: 'Demon Slayer Spirit', image: '/anime-demon.png', price: '$18.50', category: 'anime', subcategory: 'Shonen' },
+  { id: 3, title: 'Naruto Shippuden', image: '/anime-naruto.png', price: '$14.00', category: 'anime', subcategory: 'Clásicos' },
+  { id: 4, title: 'Jujutsu Kaisen', image: '/anime-jjk.png', price: '$22.00', category: 'anime', subcategory: 'Modernos' },
   
   // Retro
-  { id: 5, title: 'Zelda Master Sword', image: '/retro-zelda.png', price: '$22.00', category: 'retro', subcategory: 'Aventura', mockupBg: 'black' },
-  { id: 6, title: 'Mario 8-bit', image: '/retro-mario.png', price: '$14.99', category: 'retro', subcategory: 'Nostalgia', mockupBg: 'black' },
-  { id: 7, title: 'Sonic Retro', image: '/retro-sonic.png', price: '$13.50', category: 'retro', subcategory: 'Nostalgia', mockupBg: 'white' },
-  { id: 8, title: 'Pac-Man Arcade', image: '/retro-pacman.png', price: '$15.00', category: 'retro', subcategory: 'Arcade', mockupBg: 'black' },
+  { id: 5, title: 'Zelda Master Sword', image: '/retro-zelda.png', price: '$22.00', category: 'retro', subcategory: 'Aventura' },
+  { id: 6, title: 'Mario 8-bit', image: '/retro-mario.png', price: '$14.99', category: 'retro', subcategory: 'Nostalgia' },
+  { id: 7, title: 'Sonic Retro', image: '/retro-sonic.png', price: '$13.50', category: 'retro', subcategory: 'Nostalgia' },
+  { id: 8, title: 'Pac-Man Arcade', image: '/retro-pacman.png', price: '$15.00', category: 'retro', subcategory: 'Arcade' },
   
   // Gym
   { id: 9, title: 'Broly Lift', image: '/nuevos_disenos/broly.png', price: '$22.00', category: 'gym', subcategory: 'Anime Fitness', mockupBg: 'white' },
@@ -40,10 +40,10 @@ export const productsData: Product[] = [
   { id: 21, title: 'Seiya Cosmos', image: '/caballeros-shirt.png', price: '$23.50', category: 'simpsons', subcategory: 'TV Clásica', mockupBg: 'black' },
 
   // Argentina (La Escaloneta)
-  { id: 22, title: 'Messi Campeón', image: '/arg-messi.png', price: '$25.00', category: 'argentina', subcategory: 'Campeones', mockupBg: 'black' },
-  { id: 23, title: 'Las 3 Estrellas', image: '/arg-stars.png', price: '$24.00', category: 'argentina', subcategory: 'Campeones', mockupBg: 'black' },
-  { id: 24, title: 'Dibu Bailando', image: '/arg-dibu.png', price: '$22.50', category: 'argentina', subcategory: 'Ídolos', mockupBg: 'white' },
-  { id: 25, title: 'Escudo Dorado', image: '/arg-shield.png', price: '$23.00', category: 'argentina', subcategory: 'Gloria', mockupBg: 'black' }
+  { id: 22, title: 'Messi Campeón', image: '/arg-messi.png', price: '$25.00', category: 'argentina', subcategory: 'Campeones' },
+  { id: 23, title: 'Las 3 Estrellas', image: '/arg-stars.png', price: '$24.00', category: 'argentina', subcategory: 'Campeones' },
+  { id: 24, title: 'Dibu Bailando', image: '/arg-dibu.png', price: '$22.50', category: 'argentina', subcategory: 'Ídolos' },
+  { id: 25, title: 'Escudo Dorado', image: '/arg-shield.png', price: '$23.00', category: 'argentina', subcategory: 'Gloria' }
 ];
 
 export const getProductsByCategory = (category: Product['category']) => {
