@@ -168,7 +168,7 @@
   width: 45%;
   height: auto;
   position: absolute;
-  top: 45%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
@@ -176,14 +176,14 @@
 }
 
 /* Fusión de Tejido Textil Algorítmica */
-/* Si el diseño se estampa en remera NEGRA, usamos "screen": los fondos negros del diseño desaparecen magícamente fundiéndose con la tela */
+/* Si el diseño se estampa en remera NEGRA, usamos "lighten": descarta agresivamente el fondo negro del diseño cuadrado sin desteñir los colores del personaje */
 .virtual-mockup-container:has(.mockup-base.black) .mockup-design {
-  mix-blend-mode: screen;
+  mix-blend-mode: lighten;
 }
 
-/* Si el diseño se estampa en remera BLANCA, usamos "multiply": permite que las arrugas y sombras de la remera blanca sutilmente se filtren a través del diseño */
+/* Si el diseño se estampa en remera BLANCA, usamos "darken": oculta el fondo blanco indeseado integrándolo y dejando los pigmentos del personaje oscurecer la tela */
 .virtual-mockup-container:has(.mockup-base.white) .mockup-design {
-  mix-blend-mode: multiply;
+  mix-blend-mode: darken;
 }
 
 @media (max-width: 768px) {
