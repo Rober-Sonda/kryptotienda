@@ -34,10 +34,10 @@ export const productsData: Product[] = [
   { id: 17, title: 'Goku Gym Fitness', image: '/gym-goku-v2.jpg', price: '$22.00', category: 'gym', subcategory: 'Berserker', mockupBg: 'black' },
   
   // Simpsons / 90s
-  { id: 18, title: 'Homero No Beer No TV', image: '/simpsons-homero.jpg', price: '$22.00', category: 'simpsons', subcategory: 'Amarillos', mockupBg: 'black' },
-  { id: 19, title: 'He-Man Power', image: '/heman-shirt.png', price: '$19.99', category: 'simpsons', subcategory: 'TV Clásica', mockupBg: 'black' },
-  { id: 20, title: 'Dragon Ball Z', image: '/dbz-goku-classic.jpg', price: '$21.00', category: 'simpsons', subcategory: 'TV Clásica', mockupBg: 'black' },
-  { id: 21, title: 'Seiya Cosmos', image: '/caballeros-shirt.png', price: '$23.50', category: 'simpsons', subcategory: 'TV Clásica', mockupBg: 'black' },
+  { id: 18, title: 'Homero No Beer No TV', image: '/simpsons-homero.jpg', price: '$22.00', category: 'simpsons', subcategory: 'Amarillos' },
+  { id: 19, title: 'He-Man Power', image: '/heman-shirt.png', price: '$19.99', category: 'simpsons', subcategory: 'TV Clásica' },
+  { id: 20, title: 'Dragon Ball Z', image: '/dbz-goku-classic.jpg', price: '$21.00', category: 'simpsons', subcategory: 'TV Clásica' },
+  { id: 21, title: 'Seiya Cosmos', image: '/caballeros-shirt.png', price: '$23.50', category: 'simpsons', subcategory: 'TV Clásica' },
 
   // Argentina (La Escaloneta)
   { id: 22, title: 'Messi Campeón', image: '/arg-messi.png', price: '$25.00', category: 'argentina', subcategory: 'Campeones', mockupBg: 'black' },
