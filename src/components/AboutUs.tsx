@@ -11,16 +11,10 @@ const AboutUs: React.FC = () => {
       </div>
 
       <div className="container about-container">
-        {/* Floating Glass Terminal */}
-        <div className="krypton-glass-terminal">
-          <div className="terminal-header">
-            <span className="terminal-dot red"></span>
-            <span className="terminal-dot yellow"></span>
-            <span className="terminal-dot green"></span>
-            <span className="terminal-title">SYS.KRYPTON // DECRYPTING LORE</span>
-          </div>
+        {/* Monolithic Architectural Core */}
+        <div className="krypton-glass-monolith">
           
-          <div className="terminal-body">
+          <div className="monolith-body">
             <h2 className="neon-title about-title-main">
               EL ORIGEN DE <span>KRYPTON</span>
             </h2>
@@ -41,7 +35,6 @@ const AboutUs: React.FC = () => {
               </p>
               
               <div className="epic-punchline">
-                <i className="punchline-icon">⚠️</i>
                 <p>Esta es tu kriptonita. Es ese instinto incontrolable de pasear por nuestro catálogo, mirar las estampas y sentir que <em>"te queres llevar todo"</em>. No luches contra ello; la voluntad de sucumbir ante colecciones épicas es el verdadero superpoder.</p>
               </div>
               

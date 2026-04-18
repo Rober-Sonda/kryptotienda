@@ -58,82 +58,75 @@
   justify-content: center;
 }
 
-/* --- FLOATING GLASS TERMINAL CARD --- */
-.krypton-glass-terminal {
-  background: var(--glass-bg, rgba(10, 12, 14, 0.75));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border, rgba(57, 255, 20, 0.2));
-  border-radius: 12px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-              0 0 30px rgba(57, 255, 20, 0.1);
+/* --- MONOLITHIC GLASS CORE --- */
+.krypton-glass-monolith {
+  background: var(--glass-bg, rgba(10, 12, 14, 0.70));
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  /* Aesthetic Sci-Fi Frame */
+  border-top: 1px solid var(--glass-border, rgba(57, 255, 20, 0.4));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 1px solid rgba(255, 255, 255, 0.02);
+  border-right: 1px solid rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              0 -5px 15px rgba(57, 255, 20, 0.15);
   width: 100%;
   max-width: 900px;
   overflow: hidden;
   transform: translateY(0);
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease, background 0.3s ease;
+  position: relative;
 }
 
-[data-theme="light"] .krypton-glass-terminal {
+/* Accento de Luz Decorativo en el borde superior */
+.krypton-glass-monolith::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 2px;
+  background: var(--krypton-green);
+  box-shadow: 0 0 10px var(--krypton-green-glow);
+  opacity: 0.8;
+}
+
+[data-theme="light"] .krypton-glass-monolith {
   background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1),
-              inset 0 0 0 1px rgba(0, 0, 0, 0.05),
-              0 0 30px rgba(57, 255, 20, 0.15);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 1),
+              0 -5px 15px rgba(57, 255, 20, 0.2);
+  border-top: 1px solid var(--krypton-green);
+  border-left: 1px solid rgba(0,0,0,0.05);
+  border-right: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
-.krypton-glass-terminal:hover {
+.krypton-glass-monolith:hover {
   transform: translateY(-5px);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8),
-              inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-              0 0 40px rgba(57, 255, 20, 0.15);
-  border-color: rgba(57, 255, 20, 0.4);
+  box-shadow: 0 50px 120px rgba(0, 0, 0, 0.8),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15),
+              0 -5px 25px rgba(57, 255, 20, 0.25);
+  border-top-color: rgba(57, 255, 20, 0.7);
 }
 
-/* --- TERMINAL MAC-STYLE HEADER --- */
-.terminal-header {
-  background: var(--bg-card);
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid var(--border-color, rgba(57, 255, 20, 0.15));
+[data-theme="light"] .krypton-glass-monolith:hover {
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 1),
+              0 -5px 25px rgba(57, 255, 20, 0.3);
 }
 
-[data-theme="light"] .terminal-header {
-  background: rgba(240, 240, 240, 0.9);
-}
-
-.terminal-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-.terminal-dot.red { background-color: #ff5f56; }
-.terminal-dot.yellow { background-color: #ffbd2e; }
-.terminal-dot.green { 
-  background-color: var(--krypton-green); 
-  box-shadow: 0 0 8px var(--krypton-green);
-}
-
-.terminal-title {
-  margin-left: auto;
-  font-family: var(--font-mono);
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  opacity: 0.7;
-}
-
-/* --- TERMINAL TYPOGRAPHY & BODY --- */
-.terminal-body {
-  padding: 3rem 4rem;
+/* --- MONOLITH TYPOGRAPHY & BODY --- */
+.monolith-body {
+  padding: 4rem 4.5rem;
 }
 
 .about-title-main {
   font-family: var(--font-edo);
-  font-size: 3.5rem;
+  font-size: 3.8rem;
   margin-bottom: 2rem;
   text-align: center;
   line-height: 1;
@@ -181,29 +174,21 @@
 .epic-punchline {
   background: linear-gradient(90deg, rgba(57,255,20,0.1) 0%, rgba(0,0,0,0.2) 100%);
   border-left: 4px solid var(--krypton-green);
-  padding: 1.5rem 2rem;
-  margin: 2.5rem 0;
+  padding: 1.8rem 2.2rem;
+  margin: 3rem 0;
   border-radius: 0 8px 8px 0;
-  display: flex;
-  gap: 1.5rem;
-  align-items: flex-start;
 }
 
 [data-theme="light"] .epic-punchline {
   background: linear-gradient(90deg, rgba(57,255,20,0.1) 0%, rgba(0,0,0,0.02) 100%);
 }
 
-.punchline-icon {
-  font-style: normal;
-  font-size: 1.5rem;
-  margin-top: 2px;
-}
-
 .epic-punchline p {
   margin: 0;
   font-style: italic;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   opacity: 1;
+  color: var(--text-main);
 }
 
 .epic-welcome {
@@ -211,7 +196,7 @@
   font-family: var(--font-heading);
   font-size: 1.5rem !important;
   color: var(--text-muted) !important;
-  margin-top: 3rem !important;
+  margin-top: 3.5rem !important;
   margin-bottom: 0 !important;
   line-height: 1.5 !important;
 }
@@ -221,11 +206,11 @@
   position: relative;
   display: inline-block;
   color: var(--krypton-green);
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin-top: 10px;
+  margin-top: 15px;
   text-shadow: 0 0 15px var(--krypton-green-glow);
 }
 
@@ -271,6 +256,12 @@
    MOBILE RESPONSIVENESS
    ============================================================== */
 
+@media (max-width: 992px) {
+  .monolith-body {
+    padding: 3rem 2.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .cinematic-about-section {
     padding: 2rem 1rem;
@@ -284,20 +275,20 @@
   
   .about-image-layer {
     background-attachment: scroll;
-    opacity: 0.3; /* Imagen más suave en móvil para priorizar lectura */
+    opacity: 0.25; /* Imagen más suave en móvil para priorizar lectura */
   }
 
-  .krypton-glass-terminal {
-    backdrop-filter: blur(20px); /* Más blur para celular porque la imagen está detrás */
-    border-radius: 16px;
+  .krypton-glass-monolith {
+    backdrop-filter: blur(24px); /* Más blur para celular porque la imagen está detrás */
+    border-radius: 8px;
   }
 
-  .terminal-body {
-    padding: 2rem 1.5rem;
+  .monolith-body {
+    padding: 2.5rem 1.5rem;
   }
 
   .about-title-main {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
   }
 
   .about-text-glow p {
@@ -307,45 +298,26 @@
   }
 
   .epic-punchline {
-    padding: 1rem;
-    gap: 1rem;
-    flex-direction: column;
-    align-items: center;
+    padding: 1.5rem;
     text-align: center;
     border-left: none;
     border-top: 3px solid var(--krypton-green);
     background: linear-gradient(180deg, rgba(57,255,20,0.1) 0%, transparent 100%);
-  }
-
-  .punchline-icon {
-    margin: 0;
+    margin: 2rem 0;
   }
 
   .glitch-text {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .terminal-header {
-    padding: 10px 15px;
-  }
-  
-  .terminal-title {
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    max-width: 150px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .terminal-body {
-    padding: 1.5rem 1rem;
+  .monolith-body {
+    padding: 2rem 1.2rem;
   }
 
   .about-title-main {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
   }
 
   .about-text-glow p {
