@@ -28,10 +28,10 @@ export const productsData: Product[] = [
   { id: 12, title: 'Galaxy Groot Gym', image: '/nuevos_disenos/groot.png', price: '$22.00', category: 'gym', subcategory: 'OTROS', mockupBg: 'black' },
   { id: 13, title: 'Sumo Gym Honda', image: '/nuevos_disenos/ehonda.png', price: '$22.00', category: 'gym', subcategory: 'OTROS', mockupBg: 'white' },
   
-  { id: 14, title: 'Zoro Big or Home', image: '/gym-zoro-v2.jpg', price: '$22.00', category: 'gym', subcategory: 'Anime Fitness', mockupBg: 'black' },
-  { id: 15, title: 'Luffy Beast Mode', image: '/gym-luffy-v2.jpg', price: '$22.00', category: 'gym', subcategory: 'Anime Fitness', mockupBg: 'black' },
-  { id: 16, title: 'Gohan One More Rep', image: '/gym-gohan-v2.jpg', price: '$22.00', category: 'gym', subcategory: 'Berserker', mockupBg: 'black' },
-  { id: 17, title: 'Goku Gym Fitness', image: '/gym-goku-v2.jpg', price: '$22.00', category: 'gym', subcategory: 'Berserker', mockupBg: 'black' },
+  { id: 14, title: 'Zoro Big or Home', image: '/gym-zoro-v2.jpg', price: '$22.00', category: 'gym', subcategory: 'Anime Fitness' },
+  { id: 15, title: 'Luffy Beast Mode', image: '/gym-luffy-v2.jpg', price: '$22.00', category: 'gym', subcategory: 'Anime Fitness' },
+  { id: 16, title: 'Gohan One More Rep', image: '/gym-gohan-v2.jpg', price: '$22.00', category: 'gym', subcategory: 'Berserker' },
+  { id: 17, title: 'Goku Gym Fitness', image: '/gym-goku-v2.jpg', price: '$22.00', category: 'gym', subcategory: 'Berserker' },
   
   // Simpsons / 90s
   { id: 18, title: 'Homero No Beer No TV', image: '/simpsons-homero.jpg', price: '$22.00', category: 'simpsons', subcategory: 'Amarillos', mockupBg: 'black' },
