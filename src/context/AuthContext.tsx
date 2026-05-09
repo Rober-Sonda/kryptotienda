@@ -27,20 +27,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   useEffect(() => {
-    // Detecta si es un dispositivo móvil / touch para usar redirect en lugar de popup
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
-      window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-
-    // Maneja el resultado del redirect de Google (solo en móvil)
-    if (isMobile) {
-      getRedirectResult(auth).then((result) => {
-        if (result?.user) {
-          setCurrentUser(result.user);
-        }
-      }).catch((err) => {
-        console.error('Redirect sign-in error:', err);
-      });
-    }
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -50,25 +36,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const loginWithGoogle = async () => {
-    // En móvil (iOS/Android), los popups son bloqueados por el navegador.
-    // Usamos redirect en móvil y popup en desktop.
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
-      window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-    
     try {
-      if (isMobile) {
-        await signInWithRedirect(auth, googleProvider);
-      } else {
-        await signInWithPopup(auth, googleProvider);
-      }
+      await signInWithPopup(auth, googleProvider);
     } catch (error) {
       console.error("Error signing in", error);
-      // Fallback: intenta con popup si redirect falla
-      try {
-        await signInWithPopup(auth, googleProvider);
-      } catch {
-        alert("Hubo un error al iniciar sesión. Por favor intenta de nuevo.");
-      }
+      alert("Hubo un error al iniciar sesión. Verifica tu conexión e intenta de nuevo.");
     }
   };
 
