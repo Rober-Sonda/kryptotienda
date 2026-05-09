@@ -5,7 +5,8 @@ import './Admin.css';
 
 const AdminCategoriesView: React.FC = () => {
   const { categories, loading, addCategory, updateCategory, removeCategory } = useCategories();
-  const [isEditing, setIsEditing] = useState(false);
+  const { categories, loading, addCategory, updateCategory, removeCategory } = useCategories();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<Partial<Category>>({
     name: '', slug: '', shortName: '', showOnHome: false, homeOrder: 0, subcategories: []
   });
@@ -35,15 +36,21 @@ const AdminCategoriesView: React.FC = () => {
     }
   };
 
+  const openNewModal = () => {
+    setCurrentCategory({ name: '', slug: '', shortName: '', showOnHome: false, homeOrder: 0, subcategories: [] });
+    setNewSubcat('');
+    setIsModalOpen(true);
+  };
+
   const resetForm = () => {
-    setIsEditing(false);
+    setIsModalOpen(false);
     setCurrentCategory({ name: '', slug: '', shortName: '', showOnHome: false, homeOrder: 0, subcategories: [] });
     setNewSubcat('');
   };
 
   const handleEdit = (cat: Category) => {
     setCurrentCategory(cat);
-    setIsEditing(true);
+    setIsModalOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -71,100 +78,152 @@ const AdminCategoriesView: React.FC = () => {
 
   return (
     <div className="admin-view">
-      <div className="admin-header">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Gestión de Categorías</h2>
-        <button className="neon-btn small-btn" onClick={() => { resetForm(); setIsEditing(true); }}>
+        <button className="admin-btn" onClick={openNewModal}>
           <Plus size={18} /> Nueva Categoría
         </button>
       </div>
 
-      {isEditing && (
-        <div className="admin-form-container glass-panel">
-          <h3>{currentCategory.id ? 'Editar Categoría' : 'Nueva Categoría'}</h3>
-          <form onSubmit={handleSave} className="admin-form">
-            
-            <div className="form-row">
-              <div className="form-group">
-                <label>Nombre Completo</label>
-                <input 
-                  type="text" required
-                  value={currentCategory.name || ''} 
-                  onChange={e => setCurrentCategory({...currentCategory, name: e.target.value})}
-                  placeholder="Ej. Anime Clásico & Actual"
-                />
-              </div>
-              <div className="form-group">
-                <label>Slug (Identificador único)</label>
-                <input 
-                  type="text" required
-                  value={currentCategory.slug || ''} 
-                  onChange={e => setCurrentCategory({...currentCategory, slug: e.target.value})}
-                  placeholder="Ej. anime"
-                />
-              </div>
-            </div>
+      <div className="admin-card" style={{ padding: 0, overflowX: 'auto' }}>
+        {loading ? (
+          <div style={{ padding: '20px', textAlign: 'center' }}>Cargando categorías...</div>
+        ) : (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Slug</th>
+                <th>En Inicio</th>
+                <th>Subcategorías</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map(cat => (
+                <tr key={cat.id}>
+                  <td>
+                    <strong>{cat.name}</strong>
+                    {cat.shortName && <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block' }}>Corto: {cat.shortName}</span>}
+                  </td>
+                  <td>{cat.slug}</td>
+                  <td>{cat.showOnHome ? `Sí (Orden: ${cat.homeOrder})` : 'No'}</td>
+                  <td>{cat.subcategories.join(', ') || '-'}</td>
+                  <td>
+                    <button onClick={() => handleEdit(cat)} style={{ background: 'none', border: 'none', color: 'var(--text-light)', cursor: 'pointer', marginRight: '10px' }}>
+                      <Edit2 size={18} />
+                    </button>
+                    <button onClick={() => handleDelete(cat.id!)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                      <Trash2 size={18} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {categories.length === 0 && (
+                <tr>
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '20px' }}>No hay categorías creadas.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
+      </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label>Nombre Corto (Botones)</label>
-                <input 
-                  type="text" 
-                  value={currentCategory.shortName || ''} 
-                  onChange={e => setCurrentCategory({...currentCategory, shortName: e.target.value})}
-                  placeholder="Ej. Anime"
-                />
-              </div>
-              <div className="form-group" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', marginTop: '25px' }}>
+      {isModalOpen && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '20px' }}>
+          <div className="admin-card" style={{ width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto' }}>
+            <h3 style={{ marginBottom: '20px' }}>{currentCategory.id ? 'Editar Categoría' : 'Nueva Categoría'}</h3>
+            <form onSubmit={handleSave}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                
+                <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+                  <label>Nombre Completo *</label>
                   <input 
-                    type="checkbox" 
-                    checked={currentCategory.showOnHome || false}
-                    onChange={e => setCurrentCategory({...currentCategory, showOnHome: e.target.checked})}
-                    style={{ width: '20px', height: '20px' }}
+                    type="text" required
+                    value={currentCategory.name || ''} 
+                    onChange={e => setCurrentCategory({...currentCategory, name: e.target.value})}
+                    placeholder="Ej. Anime Clásico & Actual"
                   />
-                  <strong>Mostrar como Sección en Inicio</strong>
-                </label>
-              </div>
-            </div>
+                </div>
 
-            {currentCategory.showOnHome && (
-              <div className="form-group" style={{ maxWidth: '200px' }}>
-                <label>Orden en el Inicio (1 = arriba)</label>
-                <input 
-                  type="number" 
-                  value={currentCategory.homeOrder || 0} 
-                  onChange={e => setCurrentCategory({...currentCategory, homeOrder: parseInt(e.target.value)})}
-                />
-              </div>
-            )}
+                <div className="admin-form-group">
+                  <label>Identificador Único (Slug) *</label>
+                  <input 
+                    type="text" required
+                    value={currentCategory.slug || ''} 
+                    onChange={e => setCurrentCategory({...currentCategory, slug: e.target.value})}
+                    placeholder="Ej. anime"
+                  />
+                </div>
 
-            <div className="form-group">
-              <label>Subcategorías</label>
-              <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                <input 
-                  type="text" 
-                  value={newSubcat}
-                  onChange={e => setNewSubcat(e.target.value)}
-                  placeholder="Nueva subcategoría"
-                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addSubcategory(); } }}
-                />
-                <button type="button" className="neon-btn small-btn" onClick={addSubcategory}>Añadir</button>
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {(currentCategory.subcategories || []).map(sub => (
-                  <span key={sub} style={{ background: 'rgba(57,255,20,0.2)', padding: '5px 10px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                    {sub}
-                    <X size={14} style={{ cursor: 'pointer' }} onClick={() => removeSubcategory(sub)} />
-                  </span>
-                ))}
-              </div>
-            </div>
+                <div className="admin-form-group">
+                  <label>Nombre Corto (Para botones)</label>
+                  <input 
+                    type="text" 
+                    value={currentCategory.shortName || ''} 
+                    onChange={e => setCurrentCategory({...currentCategory, shortName: e.target.value})}
+                    placeholder="Ej. Anime"
+                  />
+                </div>
 
-            <div className="form-actions">
-              <button type="button" className="btn-secondary" onClick={resetForm}>Cancelar</button>
-              <button type="submit" className="neon-btn">Guardar Categoría</button>
-            </div>
-          </form>
+                <div className="admin-form-group" style={{ gridColumn: '1 / -1', display: 'flex', gap: '20px', alignItems: 'center' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                    <input 
+                      type="checkbox" 
+                      checked={currentCategory.showOnHome || false}
+                      onChange={e => setCurrentCategory({...currentCategory, showOnHome: e.target.checked})}
+                    />
+                    <strong>Mostrar como Sección en Inicio</strong>
+                  </label>
+
+                  {currentCategory.showOnHome && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <label style={{ margin: 0 }}>Orden:</label>
+                      <input 
+                        type="number" 
+                        value={currentCategory.homeOrder || 0} 
+                        onChange={e => setCurrentCategory({...currentCategory, homeOrder: parseInt(e.target.value)})}
+                        style={{ width: '80px', padding: '5px' }}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
+                  <label>Subcategorías</label>
+                  <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                    <input 
+                      type="text" 
+                      value={newSubcat}
+                      onChange={e => setNewSubcat(e.target.value)}
+                      placeholder="Escribe y presiona Añadir"
+                      onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addSubcategory(); } }}
+                    />
+                    <button type="button" className="admin-btn" onClick={addSubcategory}>Añadir</button>
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', minHeight: '30px', padding: '10px', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
+                    {(currentCategory.subcategories || []).length === 0 && (
+                      <span style={{ color: 'var(--text-muted)' }}>No hay subcategorías.</span>
+                    )}
+                    {(currentCategory.subcategories || []).map(sub => (
+                      <span key={sub} style={{ background: 'var(--krypton-green)', color: 'black', padding: '4px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.9rem', fontWeight: 'bold' }}>
+                        {sub}
+                        <X size={14} style={{ cursor: 'pointer' }} onClick={() => removeSubcategory(sub)} />
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
+                <button type="button" onClick={resetForm} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'white', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+                  Cancelar
+                </button>
+                <button type="submit" className="admin-btn">Guardar Categoría</button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
