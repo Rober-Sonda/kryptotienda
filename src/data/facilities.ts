@@ -1,4 +1,4 @@
-import { Facility } from '../hooks/useFacilities';
+import type { Facility } from '../hooks/useFacilities';
 
 export const initialFacilitiesData: Facility[] = [
   {
