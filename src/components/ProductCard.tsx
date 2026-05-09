@@ -4,14 +4,16 @@ import QuickViewModal from './QuickViewModal.tsx';
 import './ProductCard.css';
 
 interface ProductCardProps {
-  id: number;
+  id: string | number;
   title: string;
   image: string;
   price: string;
+  offerPrice?: string;
   mockupBg?: 'black' | 'white';
+  isMadeToOrder?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mockupBg }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, offerPrice, mockupBg, isMadeToOrder }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const handleOpenQuickView = () => {
@@ -48,7 +50,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mock
       <div className="product-info">
         <div className="product-text">
           <h3 className="product-title">{title}</h3>
-          <p className="product-price">{price}</p>
+          {offerPrice ? (
+            <p className="product-price">
+              <span style={{ textDecoration: 'line-through', color: 'var(--text-muted)', fontSize: '0.8em', marginRight: '5px' }}>{price}</span>
+              <span style={{ color: 'var(--krypton-green)' }}>{offerPrice}</span>
+            </p>
+          ) : (
+            <p className="product-price">{price}</p>
+          )}
+          {isMadeToOrder && <span style={{ display: 'inline-block', backgroundColor: 'rgba(255,165,0,0.2)', color: 'orange', padding: '2px 6px', borderRadius: '4px', fontSize: '0.75rem', marginTop: '4px' }}>Por Pedido</span>}
         </div>
         <button className="mobile-cart-btn" onClick={(e) => { e.stopPropagation(); handleOpenQuickView(); }}>
           <ShoppingCart size={20} />
@@ -59,7 +69,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, mock
         <QuickViewModal 
           isOpen={isModalOpen} 
           onClose={() => setIsModalOpen(false)} 
-          product={{id, title, image, price, mockupBg}} 
+          product={{id, title, image, price, offerPrice, mockupBg, isMadeToOrder}} 
         />
       )}
     </>

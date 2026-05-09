@@ -5,6 +5,7 @@ import type { User } from 'firebase/auth';
 
 interface AuthContextType {
   currentUser: User | null;
+  isAdmin: boolean;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
@@ -79,8 +80,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const isAdmin = currentUser?.email === 'rober.junin@gmail.com' || currentUser?.email === 'santiagocaceres65@gmail.com';
+
   return (
-    <AuthContext.Provider value={{ currentUser, loginWithGoogle, logout, loading, showLoginPrompt, setShowLoginPrompt }}>
+    <AuthContext.Provider value={{ currentUser, isAdmin, loginWithGoogle, logout, loading, showLoginPrompt, setShowLoginPrompt }}>
       {!loading && children}
     </AuthContext.Provider>
   );

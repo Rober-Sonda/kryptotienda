@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { productsData } from '../data/products.ts';
+import { useProducts } from '../hooks/useProducts.ts';
 import ProductCard from '../components/ProductCard.tsx';
 import { Filter, X, ChevronDown, ChevronRight } from 'lucide-react';
 import './StoreView.css';
@@ -15,6 +15,7 @@ const categories = [
 ];
 
 const StoreView: React.FC = () => {
+  const { products: productsData, loading } = useProducts();
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get('category');
   
@@ -69,10 +70,10 @@ const StoreView: React.FC = () => {
       map.set(cat.id, Array.from(subs));
     });
     return map;
-  }, []);
+  }, [productsData]);
 
   const filteredProducts = useMemo(() => {
-    let prods = productsData;
+    let prods = productsData.filter(p => p.isActive !== false);
     if (activeCategory !== 'all') {
       prods = prods.filter(p => p.category === activeCategory);
     }
@@ -80,7 +81,7 @@ const StoreView: React.FC = () => {
       prods = prods.filter(p => p.subcategory === activeSubcategory);
     }
     return prods;
-  }, [activeCategory, activeSubcategory]);
+  }, [productsData, activeCategory, activeSubcategory]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -146,6 +147,11 @@ const StoreView: React.FC = () => {
         </p>
       </div>
       
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '5rem 0', color: 'var(--krypton-green)' }}>
+          CARGANDO CATÁLOGO...
+        </div>
+      ) : (
       <div className="store-layout container">
         
         <div className="mobile-filter-bar">
@@ -186,7 +192,9 @@ const StoreView: React.FC = () => {
                  title={product.title}
                  image={product.image}
                  price={product.price}
+                 offerPrice={product.offerPrice}
                  mockupBg={product.mockupBg}
+                 isMadeToOrder={product.isMadeToOrder}
                />
              ))}
           </div>
@@ -198,6 +206,7 @@ const StoreView: React.FC = () => {
           )}
         </div>
       </div>
+      )}
     </div>
   );
 };

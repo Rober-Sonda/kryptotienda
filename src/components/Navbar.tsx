@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
-  const { currentUser, loginWithGoogle, logout } = useAuth();
+  const { currentUser, isAdmin, loginWithGoogle, logout } = useAuth();
   const { items, setIsCartOpen } = useCart();
 
   const getInitialTheme = (): 'light' | 'dark' => {
@@ -80,6 +80,11 @@ const Navbar: React.FC = () => {
                      <p className="dropdown-name">{currentUser.displayName}</p>
                      <p className="dropdown-email">{currentUser.email}</p>
                    </div>
+                   {isAdmin && (
+                     <Link to="/admin" className="dropdown-logout" onClick={() => setProfileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 15px', color: 'var(--krypton-green)', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.1)', background: 'transparent', width: '100%', textAlign: 'left', border: 'none', cursor: 'pointer' }}>
+                       ⚙️ Panel de Admin
+                     </Link>
+                   )}
                    <button className="dropdown-logout" onClick={() => { logout(); setProfileMenuOpen(false); }}>
                      <LogOut size={16} /> Cerrar Sesión
                    </button>

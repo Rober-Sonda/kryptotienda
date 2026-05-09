@@ -4,14 +4,24 @@ import Footer from './components/Footer.tsx';
 import HomeView from './views/HomeView.tsx';
 import CartSidebar from './components/CartSidebar.tsx';
 import AuthModal from './components/AuthModal.tsx';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute.tsx';
 
 const StoreView = lazy(() => import('./views/StoreView.tsx'));
 const CustomDesignView = lazy(() => import('./views/CustomDesignView.tsx'));
 const AboutView = lazy(() => import('./views/AboutView.tsx'));
+
+// Admin Views
+const AdminLayout = lazy(() => import('./views/admin/AdminLayout.tsx'));
+const AdminProductsView = lazy(() => import('./views/admin/AdminProductsView.tsx'));
+const AdminSettingsView = lazy(() => import('./views/admin/AdminSettingsView.tsx'));
+const AdminMigrationView = lazy(() => import('./views/admin/AdminMigrationView.tsx'));
+
 import './App.css';
 
 function App() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => {
@@ -29,8 +39,8 @@ function App() {
 
   return (
     <div className="app-container">
-      <Navbar />
-      <CartSidebar />
+      {!isAdminRoute && <Navbar />}
+      {!isAdminRoute && <CartSidebar />}
       
       <main>
         <Suspense fallback={
@@ -43,6 +53,16 @@ function App() {
             <Route path="/store" element={<StoreView />} />
             <Route path="/custom" element={<CustomDesignView />} />
             <Route path="/about" element={<AboutView />} />
+            
+            <Route path="/admin" element={<ProtectedRoute />}>
+              <Route element={<AdminLayout />}>
+                <Route index element={<AdminProductsView />} />
+                <Route path="products" element={<AdminProductsView />} />
+                <Route path="settings" element={<AdminSettingsView />} />
+                <Route path="migration" element={<AdminMigrationView />} />
+              </Route>
+            </Route>
+
             <Route path="*" element={
               <div style={{ padding: '100px 20px', textAlign: 'center', minHeight: '60vh' }}>
                 <h2 className="title-krypton" style={{ fontSize: '3rem' }}>Error 404</h2>
@@ -53,7 +73,7 @@ function App() {
         </Suspense>
       </main>
 
-      <Footer />
+      {!isAdminRoute && <Footer />}
       <AuthModal />
     </div>
   );

@@ -9,11 +9,13 @@ interface QuickViewModalProps {
   isOpen: boolean;
   onClose: () => void;
   product: {
-    id: number;
+    id: string | number;
     title: string;
     image: string;
     price: string;
+    offerPrice?: string;
     mockupBg?: 'black' | 'white';
+    isMadeToOrder?: boolean;
   } | null;
 }
 
@@ -49,7 +51,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
       id: product.id, 
       title: product.title, 
       image: product.image, 
-      price: product.price,
+      price: product.offerPrice || product.price,
       size: selectedSize
     });
     
@@ -73,7 +75,15 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
         
         <div className="qv-details">
           <h2 className="qv-title">{product.title}</h2>
-          <p className="qv-price">{product.price}</p>
+          {product.offerPrice ? (
+            <p className="qv-price">
+              <span style={{ textDecoration: 'line-through', color: 'var(--text-muted)', fontSize: '0.8em', marginRight: '10px' }}>{product.price}</span>
+              <span style={{ color: 'var(--krypton-green)' }}>{product.offerPrice}</span>
+            </p>
+          ) : (
+            <p className="qv-price">{product.price}</p>
+          )}
+          {product.isMadeToOrder && <p style={{ color: 'orange', fontSize: '0.9rem', marginBottom: '15px' }}>⚠️ Producto fabricado por pedido (Stock exclusivo).</p>}
           
           <div className="qv-size-selector">
             <h4>Selecciona tu Armadura</h4>
