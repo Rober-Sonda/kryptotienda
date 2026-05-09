@@ -10,7 +10,7 @@ const AdminLayout: React.FC = () => {
     <div className="admin-layout">
       <aside className="admin-sidebar">
         <div className="admin-logo">
-          <h2>KRYPTON ADMIN</h2>
+          <h2 className="title-krypton" style={{ fontSize: '1.5rem', margin: 0 }}>KRYPTON ADMIN</h2>
         </div>
         <nav className="admin-nav">
           <Link to="/admin/products" className={`admin-link ${location.pathname.includes('/products') ? 'active' : ''}`}>
