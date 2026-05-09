@@ -80,7 +80,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const isAdmin = currentUser?.email === 'rober.junin@gmail.com' || currentUser?.email === 'santiagocaceres65@gmail.com';
+  const userEmail = currentUser?.email?.toLowerCase() || '';
+  const isAdmin = userEmail === 'rober.junin@gmail.com' || userEmail === 'santiagocaceres65@gmail.com';
 
   return (
     <AuthContext.Provider value={{ currentUser, isAdmin, loginWithGoogle, logout, loading, showLoginPrompt, setShowLoginPrompt }}>
