@@ -187,8 +187,8 @@ const StoreView: React.FC = () => {
           <div className="products-grid">
             {filteredProducts.map(product => (
                <ProductCard 
-                 key={product.id}
-                 id={product.id}
+                 key={product.id || product.title}
+                 id={product.id!}
                  title={product.title}
                  image={product.image}
                  price={product.price}
