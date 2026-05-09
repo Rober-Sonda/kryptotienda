@@ -5,7 +5,6 @@ import './Admin.css';
 
 const AdminCategoriesView: React.FC = () => {
   const { categories, loading, addCategory, updateCategory, removeCategory } = useCategories();
-  const { categories, loading, addCategory, updateCategory, removeCategory } = useCategories();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<Partial<Category>>({
     name: '', slug: '', shortName: '', showOnHome: false, homeOrder: 0, subcategories: []
