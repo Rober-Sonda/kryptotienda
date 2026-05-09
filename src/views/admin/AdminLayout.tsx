@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Settings, Database, ArrowLeft } from 'lucide-react';
+import { LayoutDashboard, Settings, Database, ArrowLeft, Image as ImageIcon } from 'lucide-react';
 import './Admin.css';
 
 const AdminLayout: React.FC = () => {
@@ -16,6 +16,10 @@ const AdminLayout: React.FC = () => {
           <Link to="/admin/products" className={`admin-link ${location.pathname.includes('/products') ? 'active' : ''}`}>
             <LayoutDashboard size={20} />
             Productos
+          </Link>
+          <Link to="/admin/facilities" className={`admin-link ${location.pathname.includes('/facilities') ? 'active' : ''}`}>
+            <ImageIcon size={20} />
+            Instalaciones
           </Link>
           <Link to="/admin/settings" className={`admin-link ${location.pathname.includes('/settings') ? 'active' : ''}`}>
             <Settings size={20} />
