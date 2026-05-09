@@ -85,7 +85,7 @@ const StoreView: React.FC = () => {
 
   const renderSidebarContent = () => (
     <div className="sidebar-content">
-      <h3 className="sidebar-title">Bases de Datos</h3>
+      <h3 className="sidebar-title">Categorías</h3>
       <ul className="category-list">
         {categories.map(cat => {
           const subs = subcategoriesMap.get(cat.id) || [];
