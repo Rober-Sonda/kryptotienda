@@ -4,6 +4,8 @@ import { productsData } from '../../data/products';
 import { useFacilities } from '../../hooks/useFacilities';
 import { initialFacilitiesData } from '../../data/facilities';
 import { Database } from 'lucide-react';
+import { db } from '../../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 const AdminMigrationView: React.FC = () => {
   const { addProduct } = useProducts();
@@ -12,6 +14,7 @@ const AdminMigrationView: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [migratingFac, setMigratingFac] = useState(false);
   const [facProgress, setFacProgress] = useState(0);
+  const [isMigrating, setIsMigrating] = useState(false);
 
   const handleMigrate = async () => {
     if (!window.confirm('¿Estás seguro de que quieres migrar los datos locales a Firestore? Esto creará copias si ya los habías migrado antes.')) return;
@@ -61,29 +64,55 @@ const AdminMigrationView: React.FC = () => {
     }
   };
 
+  const migrateCategories = async () => {
+    setIsMigrating(true);
+    try {
+      const initialCategories = [
+        { name: 'La Escaloneta ⭐⭐⭐', slug: 'argentina', shortName: 'Argentina', subcategories: ['Messi', 'Scaloneta ⭐⭐⭐', 'Orgullo Nacional', 'Maradona'], showOnHome: true, homeOrder: 1 },
+        { name: 'Anime Clásico & Actual', slug: 'anime', shortName: 'Anime', subcategories: ['Shonen', 'Clásicos', 'Modernos'], showOnHome: true, homeOrder: 2 },
+        { name: 'Videojuegos Clásicos', slug: 'retro', shortName: 'Retro', subcategories: ['Aventura', 'Nostalgia', 'Arcade'], showOnHome: true, homeOrder: 3 },
+        { name: 'Anime Gym & Fitness', slug: 'gym', shortName: 'Gym', subcategories: ['Anime Fitness', 'OTROS'], showOnHome: true, homeOrder: 4 },
+        { name: 'Los Simpsons & Clásicos 90s', slug: 'simpsons', shortName: 'Los Simpsons', subcategories: ['Amarillos', 'TV Clásica'], showOnHome: true, homeOrder: 5 }
+      ];
+
+      for (const cat of initialCategories) {
+        await addDoc(collection(db, 'categories'), cat);
+      }
+      
+      alert('¡Categorías iniciales migradas exitosamente a la base de datos!');
+    } catch (error) {
+      console.error(error);
+      alert('Error al migrar las categorías.');
+    }
+    setIsMigrating(false);
+  };
+
   return (
     <div>
       <h2 style={{ marginBottom: '20px' }}>Migración de Datos</h2>
       <div className="admin-card">
+        <h3>Migrar Datos Iniciales</h3>
         <p style={{ marginBottom: '20px', color: 'var(--text-muted)' }}>
-          Usa esta herramienta para copiar todos los productos que están actualmente en el archivo local de tu proyecto hacia la base de datos en Firestore. Solo deberías hacer esto una vez para no duplicar tu catálogo.
+          Esta herramienta copiará los datos estáticos locales (códigos fuente) a la base de datos de Firestore. 
+          <strong> Úsala solo una vez</strong> para inicializar tu panel de control, de lo contrario duplicarás los registros.
         </p>
-        
-        <button className="admin-btn" onClick={handleMigrate} disabled={migrating}>
-          <Database size={18} />
-          {migrating ? `Migrando Productos... ${progress}%` : 'Migrar Catálogo Actual'}
-        </button>
 
-        <hr style={{ margin: '30px 0', borderColor: 'var(--krypton-green)', opacity: 0.2 }} />
+        <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+          <button className="admin-btn" onClick={migrateCategories} disabled={isMigrating}>
+            <Database size={18} />
+            {isMigrating ? 'Migrando Categorías...' : '1. Inyectar Categorías'}
+          </button>
+          
+          <button className="admin-btn" onClick={handleMigrate} disabled={migrating}>
+            <Database size={18} />
+            {migrating ? `Migrando Productos... ${progress}%` : '2. Migrar Productos'}
+          </button>
 
-        <p style={{ marginBottom: '20px', color: 'var(--text-muted)' }}>
-          Migrar tarjetas estáticas de "Nuestras Instalaciones".
-        </p>
-        
-        <button className="admin-btn" onClick={handleMigrateFacilities} disabled={migratingFac}>
-          <Database size={18} />
-          {migratingFac ? `Migrando Instalaciones... ${facProgress}%` : 'Migrar Instalaciones'}
-        </button>
+          <button className="admin-btn" onClick={handleMigrateFacilities} disabled={migratingFac}>
+            <Database size={18} />
+            {migratingFac ? `Migrando Instalaciones... ${facProgress}%` : '3. Migrar Instalaciones'}
+          </button>
+        </div>
       </div>
     </div>
   );

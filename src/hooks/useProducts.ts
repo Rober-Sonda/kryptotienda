@@ -8,11 +8,12 @@ export interface Product {
   image: string;
   price: string;
   offerPrice?: string;
-  category: 'anime' | 'retro' | 'gym' | 'simpsons' | 'argentina';
+  category: string;
   subcategory?: string;
   mockupBg?: 'black' | 'white';
   isActive?: boolean;
   isMadeToOrder?: boolean;
+  isFeatured?: boolean;
   createdAt?: number;
 }
 
@@ -45,7 +46,8 @@ export const useProducts = () => {
       ...cleanProduct,
       createdAt: Date.now(),
       isActive: product.isActive !== undefined ? product.isActive : true,
-      isMadeToOrder: product.isMadeToOrder || false
+      isMadeToOrder: product.isMadeToOrder || false,
+      isFeatured: product.isFeatured || false
     });
   };
 

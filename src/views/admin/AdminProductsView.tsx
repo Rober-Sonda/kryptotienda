@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useProducts, type Product } from '../../hooks/useProducts';
+import { useCategories } from '../../hooks/useCategories';
 import { Plus, Edit2, Trash2, Image as ImageIcon, Upload } from 'lucide-react';
 import { storage } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const AdminProductsView: React.FC = () => {
-  const { products, loading, addProduct, updateProduct, removeProduct } = useProducts();
+  const { products, loading: productsLoading, addProduct, updateProduct, removeProduct } = useProducts();
+  const { categories, loading: categoriesLoading } = useCategories();
+  const loading = productsLoading || categoriesLoading;
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadingImg, setUploadingImg] = useState(false);
@@ -19,6 +22,7 @@ const AdminProductsView: React.FC = () => {
     mockupBg: 'black',
     isActive: true,
     isMadeToOrder: false,
+    isFeatured: false,
     image: ''
   });
 
@@ -27,8 +31,8 @@ const AdminProductsView: React.FC = () => {
   const openNewModal = () => {
     setEditingId(null);
     setFormData({
-      title: '', price: '', offerPrice: '', category: 'anime', subcategory: '',
-      mockupBg: 'black', isActive: true, isMadeToOrder: false, image: ''
+      title: '', price: '', offerPrice: '', category: categories.length > 0 ? categories[0].slug : '', subcategory: '',
+      mockupBg: 'black', isActive: true, isMadeToOrder: false, isFeatured: false, image: ''
     });
     setIsModalOpen(true);
   };
@@ -112,6 +116,7 @@ const AdminProductsView: React.FC = () => {
               <th>Oferta</th>
               <th>Estado</th>
               <th>Por Pedido</th>
+              <th>Destacado</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -131,6 +136,7 @@ const AdminProductsView: React.FC = () => {
                   </span>
                 </td>
                 <td>{p.isMadeToOrder ? 'Sí' : 'No'}</td>
+                <td>{p.isFeatured ? '🌟 Sí' : 'No'}</td>
                 <td>
                   <button onClick={() => openEditModal(p)} style={{ background: 'none', border: 'none', color: 'var(--text-light)', cursor: 'pointer', marginRight: '10px' }}>
                     <Edit2 size={18} />
@@ -174,17 +180,21 @@ const AdminProductsView: React.FC = () => {
                 <div className="admin-form-group">
                   <label>Categoría *</label>
                   <select name="category" value={formData.category} onChange={handleChange} required>
-                    <option value="anime">Anime</option>
-                    <option value="retro">Videojuegos Clásicos</option>
-                    <option value="gym">Gym & Fitness</option>
-                    <option value="simpsons">Los Simpsons</option>
-                    <option value="argentina">Argentina</option>
+                    <option value="" disabled>Selecciona una categoría</option>
+                    {categories.map(c => (
+                      <option key={c.id} value={c.slug}>{c.name}</option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="admin-form-group">
                   <label>Subcategoría (Opcional)</label>
-                  <input type="text" name="subcategory" value={formData.subcategory || ''} onChange={handleChange} />
+                  <select name="subcategory" value={formData.subcategory || ''} onChange={handleChange}>
+                    <option value="">Ninguna</option>
+                    {categories.find(c => c.slug === formData.category)?.subcategories?.map(s => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="admin-form-group" style={{ gridColumn: '1 / -1' }}>
@@ -207,7 +217,7 @@ const AdminProductsView: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="admin-form-group" style={{ gridColumn: '1 / -1', display: 'flex', gap: '20px' }}>
+                <div className="admin-form-group" style={{ gridColumn: '1 / -1', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
                   <label style={{ display: 'flex', alignItems: 'center' }}>
                     <input type="checkbox" name="isActive" checked={formData.isActive !== false} onChange={handleChange} />
                     Activo (Visible en tienda)
@@ -215,6 +225,10 @@ const AdminProductsView: React.FC = () => {
                   <label style={{ display: 'flex', alignItems: 'center' }}>
                     <input type="checkbox" name="isMadeToOrder" checked={formData.isMadeToOrder || false} onChange={handleChange} />
                     Es por pedido / Exclusivo
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center' }}>
+                    <input type="checkbox" name="isFeatured" checked={formData.isFeatured || false} onChange={handleChange} />
+                    🌟 Mostrar en Portada (Destacado)
                   </label>
                 </div>
               </div>

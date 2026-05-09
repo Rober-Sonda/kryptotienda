@@ -1,21 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useCategories } from '../hooks/useCategories.ts';
 import { useProducts } from '../hooks/useProducts.ts';
 import ProductCard from '../components/ProductCard.tsx';
 import { Filter, X, ChevronDown, ChevronRight } from 'lucide-react';
 import './StoreView.css';
 
-const categories = [
-  { id: 'all',  name: 'Todos los Archivos' },
-  { id: 'anime', name: 'Anime' },
-  { id: 'retro', name: 'Retro Gaming' },
-  { id: 'gym', name: 'Fitness & Gym' },
-  { id: 'simpsons', name: 'Clásicos 90s' },
-  { id: 'argentina', name: 'Argentina' }
-];
-
 const StoreView: React.FC = () => {
-  const { products: productsData, loading } = useProducts();
+  const { products: productsData, loading: productsLoading } = useProducts();
+  const { categories: dynamicCategories, loading: categoriesLoading } = useCategories();
+  const loading = productsLoading || categoriesLoading;
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get('category');
   
@@ -58,19 +52,21 @@ const StoreView: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const categories = useMemo(() => {
+    return [
+      { id: 'all', name: 'Todos los Archivos' },
+      ...dynamicCategories.map(c => ({ id: c.slug, name: c.name }))
+    ];
+  }, [dynamicCategories]);
+
   const subcategoriesMap = useMemo(() => {
     const map = new Map<string, string[]>();
-    categories.forEach(cat => {
-      if (cat.id === 'all') { map.set(cat.id, []); return; }
-      const subs = new Set(
-        productsData
-          .filter(p => p.category === cat.id && p.subcategory)
-          .map(p => p.subcategory as string)
-      );
-      map.set(cat.id, Array.from(subs));
+    map.set('all', []);
+    dynamicCategories.forEach(cat => {
+      map.set(cat.slug, cat.subcategories || []);
     });
     return map;
-  }, [productsData]);
+  }, [dynamicCategories]);
 
   const filteredProducts = useMemo(() => {
     let prods = productsData.filter(p => p.isActive !== false);

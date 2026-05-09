@@ -14,6 +14,7 @@ const AboutView = lazy(() => import('./views/AboutView.tsx'));
 // Admin Views
 const AdminLayout = lazy(() => import('./views/admin/AdminLayout.tsx'));
 const AdminProductsView = lazy(() => import('./views/admin/AdminProductsView.tsx'));
+const AdminCategoriesView = lazy(() => import('./views/admin/AdminCategoriesView.tsx'));
 const AdminSettingsView = lazy(() => import('./views/admin/AdminSettingsView.tsx'));
 const AdminMigrationView = lazy(() => import('./views/admin/AdminMigrationView.tsx'));
 const AdminFacilitiesView = lazy(() => import('./views/admin/AdminFacilitiesView.tsx'));
@@ -59,6 +60,7 @@ function App() {
               <Route element={<AdminLayout />}>
                 <Route index element={<AdminProductsView />} />
                 <Route path="products" element={<AdminProductsView />} />
+                <Route path="categories" element={<AdminCategoriesView />} />
                 <Route path="facilities" element={<AdminFacilitiesView />} />
                 <Route path="settings" element={<AdminSettingsView />} />
                 <Route path="migration" element={<AdminMigrationView />} />
