@@ -38,8 +38,11 @@ export const useProducts = () => {
   }, []);
 
   const addProduct = async (product: Omit<Product, 'id'>) => {
+    const cleanProduct = Object.fromEntries(
+      Object.entries(product).filter(([_, v]) => v !== undefined)
+    );
     return await addDoc(collection(db, 'products'), {
-      ...product,
+      ...cleanProduct,
       createdAt: Date.now(),
       isActive: product.isActive !== undefined ? product.isActive : true,
       isMadeToOrder: product.isMadeToOrder || false
@@ -48,7 +51,10 @@ export const useProducts = () => {
 
   const updateProduct = async (id: string, data: Partial<Product>) => {
     const docRef = doc(db, 'products', id);
-    return await updateDoc(docRef, data);
+    const cleanData = Object.fromEntries(
+      Object.entries(data).filter(([_, v]) => v !== undefined)
+    );
+    return await updateDoc(docRef, cleanData);
   };
 
   const removeProduct = async (id: string) => {
