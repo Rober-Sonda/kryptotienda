@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Herramientas locales
+public/extraer-pdf.html
+public/generador-mockups.html

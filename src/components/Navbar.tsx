@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
         <nav className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
           <Link to="/" onClick={() => { setMobileMenuOpen(false); window.scrollTo({top: 0, behavior: 'smooth'}); }} className={currentPath === '/' ? 'active' : ''}>Inicio</Link>
           <Link to="/about" onClick={() => { setMobileMenuOpen(false); window.scrollTo({top: 0, behavior: 'smooth'}); }} className={currentPath === '/about' ? 'active' : ''}>Nosotros</Link>
-          <Link to="/store" onClick={() => { setMobileMenuOpen(false); window.scrollTo({top: 0, behavior: 'smooth'}); }} className={currentPath === '/store' ? 'active' : ''}>Catálogo</Link>
+          <Link to="/store" onClick={() => { setMobileMenuOpen(false); window.scrollTo({top: 0, behavior: 'smooth'}); }} className={currentPath === '/store' ? 'active' : ''}>Tienda</Link>
           <Link to="/custom" onClick={() => { setMobileMenuOpen(false); window.scrollTo({top: 0, behavior: 'smooth'}); }} className={currentPath === '/custom' ? 'active' : ''}>Personalizado</Link>
         </nav>
 

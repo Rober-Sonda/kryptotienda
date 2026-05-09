@@ -103,11 +103,11 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
                 <p>Medidas estándar aproximadas en centímetros (Ancho x Largo):</p>
                 <table className="size-guide-table">
                   <tbody>
-                    <tr><th>S</th><td>48 x 68 cm</td></tr>
-                    <tr><th>M</th><td>50 x 70 cm</td></tr>
-                    <tr><th>L</th><td>52 x 74 cm</td></tr>
-                    <tr><th>XL</th><td>54 x 76 cm</td></tr>
-                    <tr><th>XXL</th><td>56 x 78 cm</td></tr>
+                    <tr><th>S</th><td>51 x 68 cm</td></tr>
+                    <tr><th>M</th><td>53 x 70 cm</td></tr>
+                    <tr><th>L</th><td>57 x 72 cm</td></tr>
+                    <tr><th>XL</th><td>58 x 74 cm</td></tr>
+                    <tr><th>XXL</th><td>59 x 75 cm</td></tr>
                   </tbody>
                 </table>
               </div>
