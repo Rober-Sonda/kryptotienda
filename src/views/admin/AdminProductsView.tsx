@@ -201,7 +201,7 @@ const AdminProductsView: React.FC = () => {
                   <label>Imagen del Producto *</label>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     {formData.image && <img src={formData.image} alt="Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />}
-                    <label style={{ display: 'inline-block', padding: '10px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '4px', cursor: 'pointer' }}>
+                    <label style={{ display: 'inline-block', padding: '10px', backgroundColor: 'var(--bg-dark)', borderRadius: '4px', cursor: 'pointer', border: '1px solid var(--border-color)' }}>
                       <Upload size={16} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
                       {uploadingImg ? 'Subiendo...' : 'Subir Imagen'}
                       <input type="file" style={{ display: 'none' }} accept="image/*" onChange={handleImageUpload} disabled={uploadingImg} />
@@ -234,7 +234,7 @@ const AdminProductsView: React.FC = () => {
               </div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
-                <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'white', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-main)', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
                   Cancelar
                 </button>
                 <button type="submit" className="admin-btn">Guardar Producto</button>

@@ -95,19 +95,20 @@ const AdminFacilitiesView: React.FC = () => {
 
   return (
     <div className="admin-view">
-      <div className="admin-header">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Gestión de Instalaciones</h2>
-        <button className="neon-btn small-btn" onClick={() => { resetForm(); setIsEditing(true); }}>
+        <button className="admin-btn" onClick={() => { resetForm(); setIsEditing(true); }}>
           <Plus size={18} /> Nueva Instalación
         </button>
       </div>
 
       {isEditing && (
-        <div className="admin-form-container glass-panel">
-          <h3>{currentFacility.id ? 'Editar Instalación' : 'Nueva Instalación'}</h3>
-          <form onSubmit={handleSave} className="admin-form">
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '20px' }}>
+          <div className="admin-card" style={{ width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto' }}>
+            <h3 style={{ marginBottom: '20px' }}>{currentFacility.id ? 'Editar Instalación' : 'Nueva Instalación'}</h3>
+            <form onSubmit={handleSave}>
             
-            <div className="form-group">
+            <div className="admin-form-group">
               <label>Título</label>
               <input 
                 type="text" 
@@ -118,7 +119,7 @@ const AdminFacilitiesView: React.FC = () => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="admin-form-group">
               <label>Descripción</label>
               <textarea 
                 required
@@ -129,8 +130,8 @@ const AdminFacilitiesView: React.FC = () => {
               />
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
+            <div className="admin-form-row">
+              <div className="admin-form-group">
                 <label>Tamaño en la grilla</label>
                 <select 
                   value={currentFacility.size || 'small'}
@@ -139,7 +140,7 @@ const AdminFacilitiesView: React.FC = () => {
                   {SIZES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                 </select>
               </div>
-              <div className="form-group">
+              <div className="admin-form-group">
                 <label>Orden (numérico)</label>
                 <input 
                   type="number" 
@@ -150,7 +151,7 @@ const AdminFacilitiesView: React.FC = () => {
               </div>
             </div>
 
-            <div className="form-group">
+            <div className="admin-form-group">
               <label>Imagen</label>
               <div className="image-upload-container">
                 <div className="image-preview" style={{ backgroundImage: `url(${imagePreview || currentFacility.image || ''})` }}>
@@ -178,16 +179,17 @@ const AdminFacilitiesView: React.FC = () => {
               </div>
             </div>
 
-            <div className="form-actions">
-              <button type="button" className="btn-secondary" onClick={resetForm} disabled={uploadingImage}>
+            <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
+              <button type="button" onClick={resetForm} disabled={uploadingImage} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-main)', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
                 Cancelar
               </button>
-              <button type="submit" className="neon-btn" disabled={uploadingImage}>
+              <button type="submit" className="admin-btn" disabled={uploadingImage}>
                 {uploadingImage ? 'Guardando...' : 'Guardar Instalación'}
               </button>
             </div>
           </form>
         </div>
+      </div>
       )}
 
       <div className="admin-table-container glass-panel">

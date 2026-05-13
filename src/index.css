@@ -9,7 +9,9 @@
   --bg-card: rgba(20, 20, 20, 0.8);
   --bg-card-solid: #151515; /* Fallback solido para movil dark */
   --text-main: #ffffff;
+  --text-light: var(--text-main);
   --text-muted: #a0a0a0;
+  --border-color: rgba(255, 255, 255, 0.15);
   
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
@@ -42,7 +44,9 @@
   --bg-card: rgba(255, 255, 255, 0.85);
   --bg-card-solid: #f4f4f4; /* Fallback solido para movil light */
   --text-main: #111111;
+  --text-light: var(--text-main);
   --text-muted: #555555;
+  --border-color: rgba(0, 0, 0, 0.15);
   --title-krypton-color: var(--text-main);
   --krypton-green: #2db30f;
   --krypton-green-glow: rgba(45, 179, 15, 0.4);

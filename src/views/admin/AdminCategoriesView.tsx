@@ -200,7 +200,7 @@ const AdminCategoriesView: React.FC = () => {
                     />
                     <button type="button" className="admin-btn" onClick={addSubcategory}>Añadir</button>
                   </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', minHeight: '30px', padding: '10px', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '4px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', minHeight: '30px', padding: '10px', backgroundColor: 'var(--bg-dark)', borderRadius: '4px' }}>
                     {(currentCategory.subcategories || []).length === 0 && (
                       <span style={{ color: 'var(--text-muted)' }}>No hay subcategorías.</span>
                     )}
@@ -216,7 +216,7 @@ const AdminCategoriesView: React.FC = () => {
               </div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
-                <button type="button" onClick={resetForm} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'white', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+                <button type="button" onClick={resetForm} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-main)', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
                   Cancelar
                 </button>
                 <button type="submit" className="admin-btn">Guardar Categoría</button>
