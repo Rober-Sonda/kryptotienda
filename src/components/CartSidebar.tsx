@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext.tsx';
 import { useAuth } from '../context/AuthContext.tsx';
-import { X, Trash2, ShoppingBag, LogIn } from 'lucide-react';
+import { X, Trash2, ShoppingBag, LogIn, CheckCircle } from 'lucide-react';
+import { useOrders, useOrderWhatsApp } from '../hooks/useOrders';
+import { useNavigate } from 'react-router-dom';
 import './CartSidebar.css';
 
 const CartSidebar: React.FC = () => {
@@ -13,10 +15,17 @@ const CartSidebar: React.FC = () => {
   const [selectedShipping, setSelectedShipping] = useState<{id: string, label: string, cost: number} | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [orderConfirmed, setOrderConfirmed] = useState(false);
+  const [confirmedOrder, setConfirmedOrder] = useState<any>(null);
+
+  const { addOrder } = useOrders();
+  const { generateMessage } = useOrderWhatsApp();
+  const navigate = useNavigate();
   
   // Checkout Form State
   const [formData, setFormData] = useState({
     name: '',
+    phone: '',
     address: '',
     city: '',
     apto: '',
@@ -30,6 +39,8 @@ const CartSidebar: React.FC = () => {
       setShippingOptions([]);
       setSelectedShipping(null);
       setShowCheckoutForm(false);
+      setOrderConfirmed(false);
+      setConfirmedOrder(null);
     }
   }, [isCartOpen]);
 
@@ -85,40 +96,39 @@ const CartSidebar: React.FC = () => {
 
   if (!isCartOpen) return null;
 
-  const handleGenerateWhatsApp = () => {
-    if (!currentUser && !formData.name) return;
-
-    let message = `*NUEVO PEDIDO KRYPTON TIENDA*\n\n`;
-    message += `Hola, quiero encargar los siguientes diseños:\n\n`;
-    
-    items.forEach(item => {
-      message += `- ${item.quantity}x ${item.title} ${item.size ? `[Talle ${item.size}]` : ''} ($${item.price} c/u)\n`;
-    });
-    
-    message += `\n*SUBTOTAL:* $${cartTotal.toFixed(2)}\n`;
-    if (selectedShipping) {
-      message += `*MÉTODO DE ENVÍO:* ${selectedShipping.label} ${selectedShipping.cost > 0 ? `($${selectedShipping.cost})` : '(Gratis)'}\n`;
+  const handlePlaceOrder = async () => {
+    if (!currentUser || !formData.name || !formData.phone) {
+      alert("Por favor completa tu nombre y teléfono.");
+      return;
     }
-    message += `\n*TOTAL FINAL:* $${finalTotal.toFixed(2)}\n\n`;
     
-    message += `*DATOS DEL CLIENTE:*\n`;
-    message += `- Nombre: ${formData.name}\n`;
-    message += `- Email: ${currentUser ? currentUser.email : 'No registrado'}\n`;
-    if (selectedShipping && selectedShipping.cost > 0) {
-      message += `- Dirección: ${formData.address} ${formData.apto ? `(Piso/Depto: ${formData.apto})` : ''}\n`;
-      message += `- Ciudad: ${formData.city} (CP: ${cp})\n`;
+    setIsCalculating(true);
+    try {
+      const order = {
+        customerId: currentUser.uid,
+        customerName: formData.name,
+        customerPhone: formData.phone,
+        items: items.map(item => ({
+          productId: String(item.id),
+          title: item.title,
+          price: String(item.price),
+          quantity: item.quantity,
+          size: item.size,
+          image: item.image
+        })),
+        total: finalTotal,
+        status: 'pending' as const
+      };
+      
+      const newOrderId = await addOrder(order);
+      setConfirmedOrder({ id: newOrderId, ...order, createdAt: Date.now() });
+      setOrderConfirmed(true);
+      clearCart();
+    } catch (error) {
+      console.error(error);
+      alert("Error al procesar el pedido.");
     }
-    if (formData.notes) {
-      message += `\n*NOTAS DEL PEDIDO:*\n${formData.notes}\n`;
-    }
-
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappNumber = "5491100000000"; // REPLACE WITH ACTUAL NUMBER LATER
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-    
-    window.open(whatsappUrl, '_blank');
-    clearCart();
-    setIsCartOpen(false);
+    setIsCalculating(false);
   };
 
   return (
@@ -245,30 +255,63 @@ const CartSidebar: React.FC = () => {
           </>
         ) : (
           <div className="checkout-form-container">
-            <button className="back-to-cart-btn" onClick={() => setShowCheckoutForm(false)}>
-              ← Volver al carrito
-            </button>
-            <div className="checkout-fast-form">
-              <input type="text" placeholder="Nombre Completo" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
-              <input type="text" placeholder="Ciudad (Ej: 9 de Julio)" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} />
+            {orderConfirmed && confirmedOrder ? (
+              <div style={{ textAlign: 'center', padding: '40px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+                <CheckCircle size={64} color="var(--krypton-green)" />
+                <h3 className="title-krypton">¡Pedido Confirmado!</h3>
+                <p style={{ color: 'var(--text-muted)' }}>Tu pedido se ha guardado exitosamente. Podrás ver su estado desde tu perfil.</p>
+                
+                <button 
+                  className="neon-btn" 
+                  style={{ width: '100%' }}
+                  onClick={() => {
+                    const waLink = generateMessage(confirmedOrder);
+                    window.open(waLink, '_blank');
+                  }}
+                >
+                  Confirmar por WhatsApp
+                </button>
+                
+                <button 
+                  className="neon-btn small-btn" 
+                  style={{ width: '100%', background: 'transparent', border: '1px solid var(--border-color)' }}
+                  onClick={() => {
+                    setIsCartOpen(false);
+                    navigate('/mis-pedidos');
+                  }}
+                >
+                  Ver Mis Pedidos
+                </button>
+              </div>
+            ) : (
+              <>
+                <button className="back-to-cart-btn" onClick={() => setShowCheckoutForm(false)}>
+                  ← Volver al carrito
+                </button>
+                <div className="checkout-fast-form">
+                  <input type="text" placeholder="Nombre Completo *" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                  <input type="text" placeholder="Teléfono / Celular *" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                  <input type="text" placeholder="Ciudad (Ej: 9 de Julio)" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} />
               <input type="text" placeholder="Dirección (Calle y No.)" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} />
               <input type="text" placeholder="Piso / Depto (Opcional)" value={formData.apto} onChange={e => setFormData({...formData, apto: e.target.value})} />
               <textarea placeholder="Notas adicionales del pedido o talle..." value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})} rows={3}></textarea>
             </div>
             
             <div className="cart-footer" style={{marginTop: 'auto'}}>
-              <div className="cart-final-total">
-                <span>Total Final:</span>
-                <span>${finalTotal.toFixed(2)}</span>
+                <div className="cart-final-total">
+                  <span>Total Final:</span>
+                  <span>${finalTotal.toFixed(2)}</span>
+                </div>
+                <button 
+                  className="neon-btn checkout-btn" 
+                  disabled={!formData.name || !formData.phone || isCalculating}
+                  onClick={handlePlaceOrder}
+                >
+                  {isCalculating ? 'Procesando...' : 'Confirmar Pedido'}
+                </button>
               </div>
-              <button 
-                className="neon-btn checkout-btn" 
-                disabled={!formData.name}
-                onClick={handleGenerateWhatsApp}
-              >
-                Enviar Pedido Formulario
-              </button>
-            </div>
+            </>
+            )}
           </div>
         )}
       </div>

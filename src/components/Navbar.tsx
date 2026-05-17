@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Menu, X, Sun, Moon, LogOut, User } from 'lucide-react';
+import { ShoppingCart, Menu, X, Sun, Moon, LogOut, User, Settings } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useCart } from '../context/CartContext.tsx';
@@ -61,6 +61,11 @@ const Navbar: React.FC = () => {
         </nav>
 
         <div className="nav-actions">
+          {isAdmin && (
+            <Link to="/admin" className="nav-action-btn" title="Panel de Administración" style={{ color: 'var(--krypton-green)', display: 'flex', alignItems: 'center' }}>
+              <Settings size={22} />
+            </Link>
+          )}
           <button className="nav-action-btn theme-toggle-btn" onClick={toggleTheme} title="Cambiar tema">
             {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
           </button>
@@ -80,11 +85,6 @@ const Navbar: React.FC = () => {
                      <p className="dropdown-name">{currentUser.displayName}</p>
                      <p className="dropdown-email">{currentUser.email}</p>
                    </div>
-                   {isAdmin && (
-                     <Link to="/admin" className="dropdown-logout" onClick={() => setProfileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 15px', color: 'var(--krypton-green)', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.1)', background: 'transparent', width: '100%', textAlign: 'left', border: 'none', cursor: 'pointer' }}>
-                       ⚙️ Panel de Admin
-                     </Link>
-                   )}
                    <button className="dropdown-logout" onClick={() => { logout(); setProfileMenuOpen(false); }}>
                      <LogOut size={16} /> Cerrar Sesión
                    </button>

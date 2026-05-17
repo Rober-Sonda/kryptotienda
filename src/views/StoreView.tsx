@@ -191,6 +191,7 @@ const StoreView: React.FC = () => {
                  offerPrice={product.offerPrice}
                  mockupBg={product.mockupBg}
                  isMadeToOrder={product.isMadeToOrder}
+                 sizes={product.sizes}
                />
              ))}
           </div>

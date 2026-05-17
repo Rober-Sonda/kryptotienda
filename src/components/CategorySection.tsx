@@ -4,10 +4,14 @@ import ProductCard from './ProductCard.tsx';
 import './CategorySection.css';
 
 interface Product {
-  id: number;
+  id: number | string;
   title: string;
   image: string;
   price: string;
+  offerPrice?: string;
+  mockupBg?: 'black' | 'white';
+  isMadeToOrder?: boolean;
+  sizes?: { name: string; stock: number; minStock: number }[];
 }
 
 interface CategorySectionProps {
@@ -34,7 +38,11 @@ const CategorySection: React.FC<CategorySectionProps> = ({ id, title, items, sho
             id={item.id}
             title={item.title} 
             image={item.image} 
-            price={item.price} 
+            price={item.price}
+            offerPrice={item.offerPrice}
+            mockupBg={item.mockupBg}
+            isMadeToOrder={item.isMadeToOrder}
+            sizes={item.sizes}
           />
         ))}
       </div>

@@ -2,6 +2,17 @@ import { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, query, onSnapshot, addDoc, updateDoc, deleteDoc, doc, orderBy } from 'firebase/firestore';
 
+export interface ProductSize {
+  name: string;
+  stock: number;
+  minStock: number;
+}
+
+export interface ProductBOM {
+  rawMaterialId: string;
+  quantity: number;
+}
+
 export interface Product {
   id?: string;
   title: string;
@@ -14,6 +25,8 @@ export interface Product {
   isActive?: boolean;
   isMadeToOrder?: boolean;
   isFeatured?: boolean;
+  sizes?: ProductSize[];
+  bom?: ProductBOM[];
   createdAt?: number;
 }
 

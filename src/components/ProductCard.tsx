@@ -11,9 +11,10 @@ interface ProductCardProps {
   offerPrice?: string;
   mockupBg?: 'black' | 'white';
   isMadeToOrder?: boolean;
+  sizes?: { name: string; stock: number; minStock: number }[];
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, offerPrice, mockupBg, isMadeToOrder }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, offerPrice, mockupBg, isMadeToOrder, sizes }) => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const handleOpenQuickView = () => {
@@ -69,7 +70,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, offe
         <QuickViewModal 
           isOpen={isModalOpen} 
           onClose={() => setIsModalOpen(false)} 
-          product={{id, title, image, price, offerPrice, mockupBg, isMadeToOrder}} 
+          product={{id, title, image, price, offerPrice, mockupBg, isMadeToOrder, sizes}} 
         />
       )}
     </>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Package, Tags, Settings, Database, ArrowLeft, Image as ImageIcon } from 'lucide-react';
+import { Package, Tags, Settings, Database, ArrowLeft, Image as ImageIcon, ShoppingCart, DollarSign, Bot, Briefcase } from 'lucide-react';
 import './Admin.css';
 
 const AdminLayout: React.FC = () => {
@@ -29,9 +29,33 @@ const AdminLayout: React.FC = () => {
             <Settings size={20} />
             Configuración
           </Link>
-          <Link to="/admin/migration" className={`admin-link ${location.pathname.includes('/migration') ? 'active' : ''}`}>
+          <Link to="/admin/raw-materials" className={`admin-link ${location.pathname.includes('/raw-materials') ? 'active' : ''}`}>
             <Database size={20} />
+            Materia Prima
+          </Link>
+          <Link to="/admin/sales" className={`admin-link ${location.pathname.includes('/sales') ? 'active' : ''}`}>
+            <Package size={20} />
+            Ventas / Entregas
+          </Link>
+          <Link to="/admin/orders" className={`admin-link ${location.pathname.includes('/orders') ? 'active' : ''}`}>
+            <ShoppingCart size={20} />
+            Pedidos
+          </Link>
+          <Link to="/admin/finances" className={`admin-link ${location.pathname.includes('/finances') ? 'active' : ''}`}>
+            <DollarSign size={20} />
+            Finanzas
+          </Link>
+          <Link to="/admin/companies" className={`admin-link ${location.pathname.includes('/companies') ? 'active' : ''}`}>
+            <Briefcase size={20} />
+            Empresas
+          </Link>
+          <Link to="/admin/migration" className={`admin-link ${location.pathname.includes('/migration') ? 'active' : ''}`}>
+            <Settings size={20} />
             Migración
+          </Link>
+          <Link to="/admin/assistant" className={`admin-link ${location.pathname.includes('/assistant') ? 'active' : ''}`} style={{ borderTop: '1px solid var(--border-color)', marginTop: '10px', paddingTop: '10px' }}>
+            <Bot size={20} color="var(--krypton-green)" />
+            <span style={{ color: 'var(--krypton-green)' }}>Asistente IA</span>
           </Link>
         </nav>
         <div className="admin-footer-nav">

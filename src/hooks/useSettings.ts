@@ -11,6 +11,7 @@ export interface FooterSettings {
   slogan: string;
   showCategories: boolean;
   showSocial: boolean;
+  showTrustedCompanies?: boolean;
 }
 
 const defaultSettings: FooterSettings = {
@@ -21,7 +22,8 @@ const defaultSettings: FooterSettings = {
   mapLink: "https://www.google.com/maps/place/Krypton/@-35.446565,-60.8873071,17z/data=!4m15!1m8!3m7!1s0x95bf0d95512b0001:0x1f37147b97b420d0!2sLa+Rioja+1366,+B6500+9+de+Julio,+Provincia+de+Buenos+Aires!3b1!8m2!3d-35.446565!4d-60.8847322!16s%2Fg%2F11lcnct3rs!3m5!1s0x95bf0dd142354013:0xb01b6be8757470f2!8m2!3d-35.446565!4d-60.8847322!16s%2Fg%2F11vrd9lh08",
   slogan: "Descubre tu gran debilidad.",
   showCategories: true,
-  showSocial: true
+  showSocial: true,
+  showTrustedCompanies: true
 };
 
 export const useSettings = () => {

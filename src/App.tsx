@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute.tsx';
 const StoreView = lazy(() => import('./views/StoreView.tsx'));
 const CustomDesignView = lazy(() => import('./views/CustomDesignView.tsx'));
 const AboutView = lazy(() => import('./views/AboutView.tsx'));
+const MyOrdersView = lazy(() => import('./views/MyOrdersView.tsx'));
 
 // Admin Views
 const AdminLayout = lazy(() => import('./views/admin/AdminLayout.tsx'));
@@ -18,6 +19,12 @@ const AdminCategoriesView = lazy(() => import('./views/admin/AdminCategoriesView
 const AdminSettingsView = lazy(() => import('./views/admin/AdminSettingsView.tsx'));
 const AdminMigrationView = lazy(() => import('./views/admin/AdminMigrationView.tsx'));
 const AdminFacilitiesView = lazy(() => import('./views/admin/AdminFacilitiesView.tsx'));
+const AdminRawMaterialsView = lazy(() => import('./views/admin/AdminRawMaterialsView.tsx'));
+const AdminSalesView = lazy(() => import('./views/admin/AdminSalesView.tsx'));
+const AdminOrdersView = lazy(() => import('./views/admin/AdminOrdersView.tsx'));
+const AdminFinancesView = lazy(() => import('./views/admin/AdminFinancesView.tsx'));
+const AdminAssistantView = lazy(() => import('./views/admin/AdminAssistantView.tsx'));
+const AdminCompaniesView = lazy(() => import('./views/admin/AdminCompaniesView.tsx'));
 
 import './App.css';
 
@@ -55,6 +62,7 @@ function App() {
             <Route path="/store" element={<StoreView />} />
             <Route path="/custom" element={<CustomDesignView />} />
             <Route path="/about" element={<AboutView />} />
+            <Route path="/mis-pedidos" element={<MyOrdersView />} />
             
             <Route path="/admin" element={<ProtectedRoute />}>
               <Route element={<AdminLayout />}>
@@ -64,6 +72,12 @@ function App() {
                 <Route path="facilities" element={<AdminFacilitiesView />} />
                 <Route path="settings" element={<AdminSettingsView />} />
                 <Route path="migration" element={<AdminMigrationView />} />
+                <Route path="raw-materials" element={<AdminRawMaterialsView />} />
+                <Route path="sales" element={<AdminSalesView />} />
+                <Route path="orders" element={<AdminOrdersView />} />
+                <Route path="finances" element={<AdminFinancesView />} />
+                <Route path="companies" element={<AdminCompaniesView />} />
+                <Route path="assistant" element={<AdminAssistantView />} />
               </Route>
             </Route>
 

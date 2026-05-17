@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useTrustedCompanies } from '../hooks/useTrustedCompanies';
+import { useSettings } from '../hooks/useSettings';
 import { Shield, Target, Zap, Anchor, Hexagon, Triangle, Circle, Square, Command, Activity, Compass, Cpu, Globe, Rocket, Aperture } from 'lucide-react';
 import './TrustedCompanies.css';
 
-const companies: React.FC[] = [
+const ICONS_MAP: Record<string, any> = { Shield, Target, Zap, Anchor, Hexagon, Triangle, Circle, Square, Command, Activity, Compass, Cpu, Globe, Rocket, Aperture };
+
+// Fallback legacy array to ensure it doesn't break if DB is empty
+const legacyCompanies: React.FC[] = [
   () => <div className="company-logo"><Shield size={32} /> <span>SecurityCorp</span></div>,
   () => <div className="company-logo"><Activity size={32} /> <span>CrossFit Alpha</span></div>,
   () => <div className="company-logo"><Zap size={32} /> <span>EnergyDrink Pro</span></div>,
@@ -21,6 +26,43 @@ const companies: React.FC[] = [
 ];
 
 const TrustedCompanies: React.FC = () => {
+  const { companies, loading } = useTrustedCompanies();
+  const { settings } = useSettings();
+
+  const displayCompanies = useMemo(() => {
+    if (loading) return [];
+    
+    // Filter out inactive ones
+    const activeCompanies = companies.filter(c => c.isActive);
+    
+    if (activeCompanies.length > 0) {
+      // Map DB companies to React components
+      return activeCompanies.map(c => {
+        return () => (
+          <div className="company-logo">
+            {c.logoUrl ? (
+              <img src={c.logoUrl} alt={c.name} style={{ height: '40px', objectFit: 'contain' }} />
+            ) : c.iconName && ICONS_MAP[c.iconName] ? (
+              React.createElement(ICONS_MAP[c.iconName], { size: 32 })
+            ) : null}
+            <span>{c.name}</span>
+          </div>
+        );
+      });
+    }
+
+    // If DB is empty, use legacy
+    return legacyCompanies;
+  }, [companies, loading]);
+
+  if (settings?.showTrustedCompanies === false) {
+    return null;
+  }
+
+  if (displayCompanies.length === 0) {
+    return null;
+  }
+
   return (
     <section className="trusted-companies-section">
       <div className="trusted-header text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -33,12 +75,12 @@ const TrustedCompanies: React.FC = () => {
       
       <div className="marquee-container">
         <div className="marquee-content">
-          {companies.map((Company, index) => (
+          {displayCompanies.map((Company, index) => (
             <div key={`company-a-${index}`} className="marquee-item">
               <Company />
             </div>
           ))}
-          {companies.map((Company, index) => (
+          {displayCompanies.map((Company, index) => (
             <div key={`company-b-${index}`} className="marquee-item">
               <Company />
             </div>

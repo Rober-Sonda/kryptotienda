@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { useProducts, type Product } from '../../hooks/useProducts';
 import { useCategories } from '../../hooks/useCategories';
-import { Plus, Edit2, Trash2, Image as ImageIcon, Upload } from 'lucide-react';
+import { useRawMaterials } from '../../hooks/useRawMaterials';
+import { Plus, Edit2, Trash2, Image as ImageIcon, Upload, PlusCircle, MinusCircle } from 'lucide-react';
 import { storage } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const AdminProductsView: React.FC = () => {
   const { products, loading: productsLoading, addProduct, updateProduct, removeProduct } = useProducts();
   const { categories, loading: categoriesLoading } = useCategories();
-  const loading = productsLoading || categoriesLoading;
+  const { rawMaterials, loading: rawMaterialsLoading } = useRawMaterials();
+  const loading = productsLoading || categoriesLoading || rawMaterialsLoading;
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadingImg, setUploadingImg] = useState(false);
@@ -32,9 +34,48 @@ const AdminProductsView: React.FC = () => {
     setEditingId(null);
     setFormData({
       title: '', price: '', offerPrice: '', category: categories.length > 0 ? categories[0].slug : '', subcategory: '',
-      mockupBg: 'black', isActive: true, isMadeToOrder: false, isFeatured: false, image: ''
+      mockupBg: 'black', isActive: true, isMadeToOrder: false, isFeatured: false, image: '',
+      sizes: [], bom: []
     });
     setIsModalOpen(true);
+  };
+
+  const addSize = () => {
+    setFormData({
+      ...formData,
+      sizes: [...(formData.sizes || []), { name: '', stock: 0, minStock: 0 }]
+    });
+  };
+
+  const updateSize = (index: number, field: string, value: string | number) => {
+    const newSizes = [...(formData.sizes || [])];
+    newSizes[index] = { ...newSizes[index], [field]: value };
+    setFormData({ ...formData, sizes: newSizes });
+  };
+
+  const removeSize = (index: number) => {
+    const newSizes = [...(formData.sizes || [])];
+    newSizes.splice(index, 1);
+    setFormData({ ...formData, sizes: newSizes });
+  };
+
+  const addBomItem = () => {
+    setFormData({
+      ...formData,
+      bom: [...(formData.bom || []), { rawMaterialId: '', quantity: 1 }]
+    });
+  };
+
+  const updateBomItem = (index: number, field: string, value: string | number) => {
+    const newBom = [...(formData.bom || [])];
+    newBom[index] = { ...newBom[index], [field]: value };
+    setFormData({ ...formData, bom: newBom });
+  };
+
+  const removeBomItem = (index: number) => {
+    const newBom = [...(formData.bom || [])];
+    newBom.splice(index, 1);
+    setFormData({ ...formData, bom: newBom });
   };
 
   const openEditModal = (product: Product) => {
@@ -231,8 +272,55 @@ const AdminProductsView: React.FC = () => {
                     🌟 Mostrar en Portada (Destacado)
                   </label>
                 </div>
-              </div>
 
+                <div className="admin-form-group" style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border-color)', paddingTop: '15px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                    <label style={{ margin: 0 }}>Variantes / Talles (Control de Stock)</label>
+                    <button type="button" onClick={addSize} style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: 'none', color: 'var(--krypton-green)', cursor: 'pointer' }}>
+                      <PlusCircle size={16} /> Agregar Talle
+                    </button>
+                  </div>
+                  {formData.sizes && formData.sizes.map((size, index) => (
+                    <div key={index} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+                      <input type="text" placeholder="Talle (Ej: S, M, L)" value={size.name} onChange={(e) => updateSize(index, 'name', e.target.value)} required />
+                      <input type="number" placeholder="Stock Actual" value={size.stock} onChange={(e) => updateSize(index, 'stock', parseFloat(e.target.value) || 0)} required min="0" />
+                      <input type="number" placeholder="Stock Mínimo" value={size.minStock} onChange={(e) => updateSize(index, 'minStock', parseFloat(e.target.value) || 0)} required min="0" />
+                      <button type="button" onClick={() => removeSize(index)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                        <MinusCircle size={18} />
+                      </button>
+                    </div>
+                  ))}
+                  {(!formData.sizes || formData.sizes.length === 0) && (
+                    <p style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>Si no agregas talles, el producto no tendrá control de stock por variante.</p>
+                  )}
+                </div>
+
+                <div className="admin-form-group" style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border-color)', paddingTop: '15px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                    <label style={{ margin: 0 }}>Insumos Relacionados (BOM) - Opcional</label>
+                    <button type="button" onClick={addBomItem} style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: 'none', color: 'var(--krypton-green)', cursor: 'pointer' }}>
+                      <PlusCircle size={16} /> Agregar Insumo
+                    </button>
+                  </div>
+                  {formData.bom && formData.bom.map((item, index) => (
+                    <div key={index} style={{ display: 'grid', gridTemplateColumns: '3fr 1fr auto', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
+                      <select value={item.rawMaterialId} onChange={(e) => updateBomItem(index, 'rawMaterialId', e.target.value)} required>
+                        <option value="" disabled>Selecciona Insumo...</option>
+                        {rawMaterials.map(rm => (
+                          <option key={rm.id} value={rm.id}>{rm.name} (Stock: {rm.stock})</option>
+                        ))}
+                      </select>
+                      <input type="number" placeholder="Cant." value={item.quantity} onChange={(e) => updateBomItem(index, 'quantity', parseFloat(e.target.value) || 0)} required min="0.01" step="0.01" />
+                      <button type="button" onClick={() => removeBomItem(index)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                        <MinusCircle size={18} />
+                      </button>
+                    </div>
+                  ))}
+                  {(!formData.bom || formData.bom.length === 0) && (
+                    <p style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>Especifica qué insumos se gastan por defecto al vender este producto (ej. 1 Bolsa).</p>
+                  )}
+                </div>
+              </div>
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
                 <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-main)', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
                   Cancelar

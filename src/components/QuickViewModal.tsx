@@ -16,13 +16,15 @@ interface QuickViewModalProps {
     offerPrice?: string;
     mockupBg?: 'black' | 'white';
     isMadeToOrder?: boolean;
+    sizes?: { name: string; stock: number; minStock: number }[];
   } | null;
 }
 
 const SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
 
 const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, product }) => {
-  const [selectedSize, setSelectedSize] = useState<string>('L');
+  const dynamicSizes = product?.sizes?.length ? product.sizes : SIZES.map(s => ({ name: s, stock: 999, minStock: 0 }));
+  const [selectedSize, setSelectedSize] = useState<string>(dynamicSizes[0]?.name || 'L');
   const [showGuide, setShowGuide] = useState(false);
   const { currentUser, setShowLoginPrompt } = useAuth();
   const { addToCart } = useCart();
@@ -88,15 +90,21 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ isOpen, onClose, produc
           <div className="qv-size-selector">
             <h4>Selecciona tu Armadura</h4>
             <div className="size-grid">
-              {SIZES.map(size => (
-                <button 
-                  key={size}
-                  className={`size-btn ${selectedSize === size ? 'selected' : ''}`}
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </button>
-              ))}
+              {dynamicSizes.map(size => {
+                const isOutOfStock = size.stock <= 0;
+                return (
+                  <button 
+                    key={size.name}
+                    className={`size-btn ${selectedSize === size.name ? 'selected' : ''}`}
+                    onClick={() => !isOutOfStock && setSelectedSize(size.name)}
+                    disabled={isOutOfStock}
+                    style={{ opacity: isOutOfStock ? 0.5 : 1, cursor: isOutOfStock ? 'not-allowed' : 'pointer' }}
+                    title={isOutOfStock ? 'Sin stock' : ''}
+                  >
+                    {size.name}
+                  </button>
+                );
+              })}
             </div>
             
             <div style={{marginTop: '1rem'}}>
