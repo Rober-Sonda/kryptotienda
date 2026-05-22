@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useProducts, type Product } from '../../hooks/useProducts';
+import { useProducts } from '../../hooks/useProducts';
 import { useRawMaterials } from '../../hooks/useRawMaterials';
 import { useSales, type SaleItemRawMaterial } from '../../hooks/useSales';
 import { ShoppingBag, PlusCircle, MinusCircle, CheckCircle, TrendingUp } from 'lucide-react';
@@ -10,6 +10,7 @@ const AdminSalesView: React.FC = () => {
   const { sales, loading: salesLoading, registerSale } = useSales();
   
   const [selectedProduct, setSelectedProduct] = useState<string>('');
+  const [productSearch, setProductSearch] = useState<string>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(1);
   const [salePrice, setSalePrice] = useState<number>(0);
@@ -43,6 +44,7 @@ const AdminSalesView: React.FC = () => {
   if (loading) return <div>Cargando módulo de ventas...</div>;
 
   const currentProduct = products.find(p => p.id === selectedProduct);
+  const filteredProducts = products.filter(p => p.title.toLowerCase().includes(productSearch.toLowerCase()));
 
   const handleAddRawMaterial = () => {
     if (rawMaterials.length > 0) {
@@ -130,10 +132,23 @@ const AdminSalesView: React.FC = () => {
           
           <form onSubmit={handleSubmit}>
             <div className="admin-form-group">
-              <label>Producto Vendido *</label>
-              <select value={selectedProduct} onChange={(e) => setSelectedProduct(e.target.value)} required>
-                <option value="" disabled>Selecciona el producto...</option>
-                {products.map(p => (
+              <label>Buscar Producto *</label>
+              <input 
+                type="text" 
+                placeholder="Escribe para buscar..." 
+                value={productSearch} 
+                onChange={(e) => setProductSearch(e.target.value)} 
+                style={{ marginBottom: '10px' }}
+              />
+              <select 
+                value={selectedProduct} 
+                onChange={(e) => setSelectedProduct(e.target.value)} 
+                required 
+                size={5} 
+                style={{ overflowY: 'auto' }}
+              >
+                {filteredProducts.length === 0 && <option disabled>No se encontraron productos</option>}
+                {filteredProducts.map(p => (
                   <option key={p.id} value={p.id}>{p.title}</option>
                 ))}
               </select>
@@ -164,7 +179,7 @@ const AdminSalesView: React.FC = () => {
             <div className="admin-form-group" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '15px', marginTop: '10px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                 <label style={{ margin: 0 }}>Insumos Utilizados (Para Descontar)</label>
-                <button type="button" onClick={handleAddRawMaterial} style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: 'none', color: 'var(--krypton-green)', cursor: 'pointer' }}>
+                <button type="button" onClick={handleAddRawMaterial} className="neon-btn small-btn" style={{ padding: "4px 8px" }}>
                   <PlusCircle size={16} /> Añadir Insumo
                 </button>
               </div>
@@ -177,7 +192,7 @@ const AdminSalesView: React.FC = () => {
                     ))}
                   </select>
                   <input type="number" value={item.quantity} onChange={(e) => handleUpdateRawMaterial(index, 'quantity', parseFloat(e.target.value) || 0)} required min="0.01" step="0.01" placeholder="Cant." />
-                  <button type="button" onClick={() => handleRemoveRawMaterial(index)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                  <button type="button" onClick={() => handleRemoveRawMaterial(index)} className="icon-btn danger">
                     <MinusCircle size={18} />
                   </button>
                 </div>
@@ -196,7 +211,7 @@ const AdminSalesView: React.FC = () => {
               </div>
             </div>
 
-            <button type="submit" className="admin-btn" style={{ width: '100%', marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }} disabled={isSubmitting}>
+            <button type="submit" className="neon-btn small-btn" style={{ width: '100%', marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }} disabled={isSubmitting}>
               <CheckCircle size={18} /> {isSubmitting ? 'Registrando...' : 'Registrar y Descontar Stock'}
             </button>
           </form>

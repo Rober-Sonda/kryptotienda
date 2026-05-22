@@ -97,7 +97,7 @@ const AdminFacilitiesView: React.FC = () => {
     <div className="admin-view">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Gestión de Instalaciones</h2>
-        <button className="admin-btn" onClick={() => { resetForm(); setIsEditing(true); }}>
+        <button className="neon-btn small-btn" onClick={() => { resetForm(); setIsEditing(true); }}>
           <Plus size={18} /> Nueva Instalación
         </button>
       </div>
@@ -159,7 +159,7 @@ const AdminFacilitiesView: React.FC = () => {
                 </div>
                 <div className="image-upload-controls">
                   <p className="text-muted" style={{fontSize: '0.85rem', marginBottom: '10px'}}>Sube una imagen desde tu equipo o pega una URL directa.</p>
-                  <label className="upload-btn">
+                  <label className="neon-btn small-btn" style={{ display: 'inline-block', cursor: 'pointer', textAlign: 'center' }}>
                     <Upload size={16} /> Subir desde PC
                     <input type="file" accept="image/*" onChange={handleImageChange} style={{display: 'none'}} />
                   </label>
@@ -180,10 +180,10 @@ const AdminFacilitiesView: React.FC = () => {
             </div>
 
             <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
-              <button type="button" onClick={resetForm} disabled={uploadingImage} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-main)', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+              <button type="button" onClick={resetForm} disabled={uploadingImage} className="neon-btn small-btn cancel">
                 Cancelar
               </button>
-              <button type="submit" className="admin-btn" disabled={uploadingImage}>
+              <button type="submit" className="neon-btn small-btn" disabled={uploadingImage}>
                 {uploadingImage ? 'Guardando...' : 'Guardar Instalación'}
               </button>
             </div>
@@ -220,8 +220,8 @@ const AdminFacilitiesView: React.FC = () => {
                   <td>{facility.order || 0}</td>
                   <td>
                     <div className="action-buttons">
-                      <button onClick={() => handleEdit(facility)} className="icon-btn edit" title="Editar"><Edit2 size={18} /></button>
-                      <button onClick={() => handleDelete(facility.id!)} className="icon-btn delete" title="Eliminar"><Trash2 size={18} /></button>
+                      <button onClick={() => handleEdit(facility)} className="icon-btn" title="Editar"><Edit2 size={18} /></button>
+                      <button onClick={() => handleDelete(facility.id!)} className="icon-btn danger" title="Eliminar"><Trash2 size={18} /></button>
                     </div>
                   </td>
                 </tr>

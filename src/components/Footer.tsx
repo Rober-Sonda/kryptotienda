@@ -2,11 +2,13 @@ import React from 'react';
 import { MapPin, Phone, Mail, Share2, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../hooks/useSettings.ts';
+import { useCategories } from '../hooks/useCategories.ts';
 import './Footer.css';
 
 const Footer: React.FC = () => {
   const { settings, defaultSettings } = useSettings();
-  const data = settings || defaultSettings;
+  const { categories } = useCategories();
+  const data = { ...defaultSettings, ...(settings || {}) };
 
   return (
     <footer className="footer">
@@ -31,10 +33,12 @@ const Footer: React.FC = () => {
           <div className="footer-links-group">
             <h4 className="footer-title">Categorías</h4>
             <ul className="footer-links">
-              <li><Link to="/store?category=anime">Anime</Link></li>
-              <li><Link to="/store?category=retro">Videojuegos Clásicos</Link></li>
-              <li><Link to="/store?category=gym">Gym & Fitness</Link></li>
-              <li><Link to="/store?category=simpsons">Los Simpsons</Link></li>
+              {categories.slice(0, 5).map(cat => (
+                <li key={cat.id}><Link to={`/store?category=${cat.slug}`}>{cat.name}</Link></li>
+              ))}
+              {categories.length === 0 && (
+                <li><Link to="/store">Catálogo Completo</Link></li>
+              )}
             </ul>
           </div>
         )}

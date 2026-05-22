@@ -16,6 +16,7 @@ export interface OrderItem {
 
 export interface Order {
   id?: string;
+  orderNumber?: string;
   customerId: string;
   customerName: string;
   customerPhone: string;
@@ -52,12 +53,20 @@ export const useOrders = (customerId?: string) => {
     return unsubscribe;
   }, [customerId]);
 
-  const addOrder = async (order: Omit<Order, 'id' | 'createdAt'>) => {
+  const addOrder = async (order: Omit<Order, 'id' | 'createdAt' | 'orderNumber'>) => {
+    // Generate orderNumber based on current Date + Time + random string
+    const now = new Date();
+    const dateStr = `${now.getFullYear().toString().slice(2)}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+    const randomSuffix = Math.random().toString(36).substring(2, 5).toUpperCase();
+    const orderNumber = `KRYP-${dateStr}-${timeStr}-${randomSuffix}`;
+
     const docRef = await addDoc(collection(db, 'orders'), {
       ...order,
+      orderNumber,
       createdAt: Date.now()
     });
-    return docRef.id;
+    return { id: docRef.id, orderNumber };
   };
 
   const updateOrderStatus = async (id: string, status: OrderStatus) => {
@@ -87,7 +96,7 @@ export const useOrderWhatsApp = () => {
     if (order.wasEdited) {
       message = `*PEDIDO ACTUALIZADO - KRYPTON*\n`;
     }
-    message += `ID: ${order.id || 'Nuevo'}\n`;
+    message += `ID/Nro de Pedido: ${order.orderNumber || order.id || 'Nuevo'}\n`;
     message += `Cliente: ${order.customerName}\n`;
     message += `Teléfono: ${order.customerPhone}\n\n`;
     message += `*Detalle:*\n`;

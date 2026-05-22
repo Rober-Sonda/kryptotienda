@@ -120,8 +120,8 @@ const CartSidebar: React.FC = () => {
         status: 'pending' as const
       };
       
-      const newOrderId = await addOrder(order);
-      setConfirmedOrder({ id: newOrderId, ...order, createdAt: Date.now() });
+      const { id, orderNumber } = await addOrder(order);
+      setConfirmedOrder({ id, orderNumber, ...order, createdAt: Date.now() });
       setOrderConfirmed(true);
       clearCart();
     } catch (error) {

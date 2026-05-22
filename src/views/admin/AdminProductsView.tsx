@@ -15,6 +15,12 @@ const AdminProductsView: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadingImg, setUploadingImg] = useState(false);
 
+  // Search and Pagination state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterCategory, setFilterCategory] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+
   const [formData, setFormData] = useState<Partial<Product>>({
     title: '',
     price: '',
@@ -137,13 +143,43 @@ const AdminProductsView: React.FC = () => {
     }
   };
 
+  const filteredProducts = products.filter(p => {
+    const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          (p.id && p.id.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesCategory = filterCategory === 'all' || p.category === filterCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Catálogo de Productos</h2>
-        <button className="admin-btn" onClick={openNewModal}>
+        <button className="neon-btn small-btn" onClick={openNewModal}>
           <Plus size={18} /> Nuevo Producto
         </button>
+      </div>
+
+      <div style={{ display: 'flex', gap: '15px', marginBottom: '20px', flexWrap: 'wrap' }}>
+        <input 
+          type="text" 
+          placeholder="Buscar por título o ID..." 
+          value={searchQuery}
+          onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+          style={{ padding: '10px', background: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '4px', flex: '1', minWidth: '200px' }}
+        />
+        <select 
+          value={filterCategory} 
+          onChange={(e) => { setFilterCategory(e.target.value); setCurrentPage(1); }}
+          style={{ padding: '10px', background: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '4px', minWidth: '200px' }}
+        >
+          <option value="all">Todas las categorías</option>
+          {categories.map(c => (
+            <option key={c.id} value={c.slug}>{c.name}</option>
+          ))}
+        </select>
       </div>
 
       <div className="admin-card" style={{ padding: 0, overflowX: 'auto' }}>
@@ -162,12 +198,15 @@ const AdminProductsView: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map(p => (
+            {paginatedProducts.map(p => (
               <tr key={p.id} style={{ opacity: p.isActive === false ? 0.5 : 1 }}>
                 <td>
-                  {p.image ? <img src={p.image} alt={p.title} /> : <ImageIcon size={24} />}
+                  {p.image ? <img src={p.image} alt={p.title} loading="lazy" /> : <ImageIcon size={24} />}
                 </td>
-                <td>{p.title}</td>
+                <td>
+                  <strong>{p.title}</strong><br/>
+                  <span style={{ fontSize: '0.75em', color: 'var(--text-muted)', fontFamily: 'monospace' }}>ID: {p.id}</span>
+                </td>
                 <td>{p.category} {p.subcategory && `- ${p.subcategory}`}</td>
                 <td>{p.price}</td>
                 <td>{p.offerPrice || '-'}</td>
@@ -179,23 +218,47 @@ const AdminProductsView: React.FC = () => {
                 <td>{p.isMadeToOrder ? 'Sí' : 'No'}</td>
                 <td>{p.isFeatured ? '🌟 Sí' : 'No'}</td>
                 <td>
-                  <button onClick={() => openEditModal(p)} style={{ background: 'none', border: 'none', color: 'var(--text-light)', cursor: 'pointer', marginRight: '10px' }}>
+                  <button onClick={() => openEditModal(p)} className="icon-btn">
                     <Edit2 size={18} />
                   </button>
-                  <button onClick={() => p.id && handleDelete(p.id)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                  <button onClick={() => p.id && handleDelete(p.id)} className="icon-btn danger">
                     <Trash2 size={18} />
                   </button>
                 </td>
               </tr>
             ))}
-            {products.length === 0 && (
+            {paginatedProducts.length === 0 && (
               <tr>
-                <td colSpan={8} style={{ textAlign: 'center', padding: '20px' }}>No hay productos. Usa la opción Migración si acabas de instalar el panel.</td>
+                <td colSpan={9} style={{ textAlign: 'center', padding: '20px' }}>
+                  No se encontraron productos con estos filtros.
+                </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {totalPages > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '20px', alignItems: 'center' }}>
+          <button 
+            disabled={currentPage === 1} 
+            onClick={() => setCurrentPage(p => p - 1)}
+            className="neon-btn small-btn cancel"
+            style={{ opacity: currentPage === 1 ? 0.5 : 1, cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+          >
+            Anterior
+          </button>
+          <span style={{ padding: '5px 15px', fontWeight: 'bold' }}>Página {currentPage} de {totalPages}</span>
+          <button 
+            disabled={currentPage === totalPages} 
+            onClick={() => setCurrentPage(p => p + 1)}
+            className="neon-btn small-btn cancel"
+            style={{ opacity: currentPage === totalPages ? 0.5 : 1, cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
+          >
+            Siguiente
+          </button>
+        </div>
+      )}
 
       {isModalOpen && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '20px' }}>
@@ -276,7 +339,7 @@ const AdminProductsView: React.FC = () => {
                 <div className="admin-form-group" style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border-color)', paddingTop: '15px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                     <label style={{ margin: 0 }}>Variantes / Talles (Control de Stock)</label>
-                    <button type="button" onClick={addSize} style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: 'none', color: 'var(--krypton-green)', cursor: 'pointer' }}>
+                    <button type="button" onClick={addSize} className="neon-btn small-btn" style={{ padding: "4px 8px" }}>
                       <PlusCircle size={16} /> Agregar Talle
                     </button>
                   </div>
@@ -285,7 +348,7 @@ const AdminProductsView: React.FC = () => {
                       <input type="text" placeholder="Talle (Ej: S, M, L)" value={size.name} onChange={(e) => updateSize(index, 'name', e.target.value)} required />
                       <input type="number" placeholder="Stock Actual" value={size.stock} onChange={(e) => updateSize(index, 'stock', parseFloat(e.target.value) || 0)} required min="0" />
                       <input type="number" placeholder="Stock Mínimo" value={size.minStock} onChange={(e) => updateSize(index, 'minStock', parseFloat(e.target.value) || 0)} required min="0" />
-                      <button type="button" onClick={() => removeSize(index)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                      <button type="button" onClick={() => removeSize(index)} className="icon-btn danger">
                         <MinusCircle size={18} />
                       </button>
                     </div>
@@ -298,7 +361,7 @@ const AdminProductsView: React.FC = () => {
                 <div className="admin-form-group" style={{ gridColumn: '1 / -1', borderTop: '1px solid var(--border-color)', paddingTop: '15px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                     <label style={{ margin: 0 }}>Insumos Relacionados (BOM) - Opcional</label>
-                    <button type="button" onClick={addBomItem} style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: 'none', color: 'var(--krypton-green)', cursor: 'pointer' }}>
+                    <button type="button" onClick={addBomItem} className="neon-btn small-btn" style={{ padding: "4px 8px" }}>
                       <PlusCircle size={16} /> Agregar Insumo
                     </button>
                   </div>
@@ -311,7 +374,7 @@ const AdminProductsView: React.FC = () => {
                         ))}
                       </select>
                       <input type="number" placeholder="Cant." value={item.quantity} onChange={(e) => updateBomItem(index, 'quantity', parseFloat(e.target.value) || 0)} required min="0.01" step="0.01" />
-                      <button type="button" onClick={() => removeBomItem(index)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                      <button type="button" onClick={() => removeBomItem(index)} className="icon-btn danger">
                         <MinusCircle size={18} />
                       </button>
                     </div>
@@ -322,10 +385,10 @@ const AdminProductsView: React.FC = () => {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
-                <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-main)', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="neon-btn small-btn cancel">
                   Cancelar
                 </button>
-                <button type="submit" className="admin-btn">Guardar Producto</button>
+                <button type="submit" className="neon-btn small-btn">Guardar Producto</button>
               </div>
             </form>
           </div>

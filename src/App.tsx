@@ -25,6 +25,7 @@ const AdminOrdersView = lazy(() => import('./views/admin/AdminOrdersView.tsx'));
 const AdminFinancesView = lazy(() => import('./views/admin/AdminFinancesView.tsx'));
 const AdminAssistantView = lazy(() => import('./views/admin/AdminAssistantView.tsx'));
 const AdminCompaniesView = lazy(() => import('./views/admin/AdminCompaniesView.tsx'));
+const AdminClaimsView = lazy(() => import('./views/admin/AdminClaimsView.tsx'));
 
 import './App.css';
 
@@ -76,6 +77,7 @@ function App() {
                 <Route path="sales" element={<AdminSalesView />} />
                 <Route path="orders" element={<AdminOrdersView />} />
                 <Route path="finances" element={<AdminFinancesView />} />
+                <Route path="claims" element={<AdminClaimsView />} />
                 <Route path="companies" element={<AdminCompaniesView />} />
                 <Route path="assistant" element={<AdminAssistantView />} />
               </Route>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useOrders, type Order, type OrderStatus } from '../../hooks/useOrders';
-import { Package, Clock, Truck, CheckCircle, XCircle, AlertTriangle, Plus } from 'lucide-react';
+import { useOrders, type OrderStatus } from '../../hooks/useOrders';
+import { useClaims } from '../../hooks/useClaims';
+import { Package, Clock, Truck, CheckCircle, XCircle, AlertTriangle, Plus, ShieldAlert } from 'lucide-react';
 import './Admin.css';
 
 const TABS: { id: OrderStatus | 'all', label: string, icon: any }[] = [
@@ -16,6 +17,7 @@ const ITEMS_PER_PAGE = 10;
 
 const AdminOrdersView: React.FC = () => {
   const { orders, loading, updateOrderStatus, clearEditedFlag } = useOrders();
+  const { claims } = useClaims();
   const [activeTab, setActiveTab] = useState<OrderStatus | 'all'>('pending');
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -46,12 +48,12 @@ const AdminOrdersView: React.FC = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Gestión de Pedidos</h2>
-        <button className="admin-btn">
+        <button className="neon-btn small-btn">
           <Plus size={18} /> Carga Manual
         </button>
       </div>
 
-      <div className="admin-tabs" style={{ display: 'flex', gap: '10px', marginBottom: '20px', overflowX: 'auto' }}>
+      <div className="admin-tabs">
         {TABS.map(tab => {
           const Icon = tab.icon;
           return (
@@ -59,7 +61,6 @@ const AdminOrdersView: React.FC = () => {
               key={tab.id}
               onClick={() => { setActiveTab(tab.id); setCurrentPage(1); }}
               className={`admin-tab-btn ${activeTab === tab.id ? 'active' : ''}`}
-              style={{ padding: '10px 15px', borderRadius: '4px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}
             >
               <Icon size={16} /> {tab.label}
             </button>
@@ -83,10 +84,15 @@ const AdminOrdersView: React.FC = () => {
             {paginatedOrders.map(order => (
               <tr key={order.id} style={{ backgroundColor: order.wasEdited ? 'rgba(243, 156, 18, 0.1)' : 'transparent' }}>
                 <td>
-                  {order.id?.substring(0, 8).toUpperCase()}
+                  <strong>{order.orderNumber || order.id?.substring(0, 8).toUpperCase()}</strong>
                   {order.wasEdited && (
                     <div style={{ color: '#f39c12', fontSize: '0.8em', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
                       <AlertTriangle size={12} /> Editado por cliente
+                    </div>
+                  )}
+                  {claims.find(c => c.orderId === order.id && c.status !== 'resolved' && c.status !== 'rejected') && (
+                    <div style={{ color: '#e74c3c', fontSize: '0.8em', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
+                      <ShieldAlert size={12} /> Reclamo Abierto
                     </div>
                   )}
                 </td>
@@ -111,11 +117,11 @@ const AdminOrdersView: React.FC = () => {
                 </td>
                 <td>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    <button style={{ background: 'none', border: '1px solid var(--border-color)', color: 'white', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}>
+                    <button className="neon-btn small-btn cancel">
                       Ver Detalles
                     </button>
                     {order.wasEdited && (
-                      <button onClick={() => handleClearWarning(order.id!)} style={{ background: 'none', border: '1px solid #f39c12', color: '#f39c12', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}>
+                      <button onClick={() => handleClearWarning(order.id!)} className="neon-btn small-btn" style={{ borderColor: "#f39c12", color: "#f39c12" }}>
                         Marcar Leído
                       </button>
                     )}
@@ -133,19 +139,21 @@ const AdminOrdersView: React.FC = () => {
       </div>
 
       {totalPages > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '20px', alignItems: 'center' }}>
           <button 
             disabled={currentPage === 1} 
             onClick={() => setCurrentPage(p => p - 1)}
-            style={{ padding: '5px 15px', background: 'var(--bg-card)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+            className="neon-btn small-btn cancel"
+            style={{ opacity: currentPage === 1 ? 0.5 : 1, cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
           >
             Anterior
           </button>
-          <span style={{ padding: '5px 15px' }}>Página {currentPage} de {totalPages}</span>
+          <span style={{ padding: '5px 15px', fontWeight: 'bold' }}>Página {currentPage} de {totalPages}</span>
           <button 
             disabled={currentPage === totalPages} 
             onClick={() => setCurrentPage(p => p + 1)}
-            style={{ padding: '5px 15px', background: 'var(--bg-card)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+            className="neon-btn small-btn cancel"
+            style={{ opacity: currentPage === totalPages ? 0.5 : 1, cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
           >
             Siguiente
           </button>

@@ -3,7 +3,7 @@ import { useSettings, type FooterSettings } from '../../hooks/useSettings';
 import { Save } from 'lucide-react';
 
 const AdminSettingsView: React.FC = () => {
-  const { settings, updateSettings, loading } = useSettings();
+  const { settings, updateSettings, loading, defaultSettings } = useSettings();
   const [formData, setFormData] = useState<FooterSettings | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -36,6 +36,21 @@ const AdminSettingsView: React.FC = () => {
       alert('Error al guardar.');
     }
     setSaving(false);
+  };
+
+  const handleRestoreDefaults = async () => {
+    if (window.confirm("¿Estás seguro de que quieres restaurar los valores de fábrica? Perderás cualquier cambio que hayas guardado.")) {
+      setSaving(true);
+      try {
+        await updateSettings(defaultSettings);
+        setFormData(defaultSettings);
+        alert('Valores por defecto restaurados correctamente.');
+      } catch (error) {
+        console.error(error);
+        alert('Error al restaurar valores.');
+      }
+      setSaving(false);
+    }
   };
 
   return (
@@ -105,10 +120,15 @@ const AdminSettingsView: React.FC = () => {
           </label>
         </div>
 
-        <button type="submit" className="admin-btn" disabled={saving}>
-          <Save size={18} />
-          {saving ? 'Guardando...' : 'Guardar Cambios'}
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button type="button" onClick={handleRestoreDefaults} className="neon-btn small-btn" style={{ background: 'transparent', border: '1px solid #ff4444', color: '#ff4444' }} disabled={saving}>
+            Restaurar por Defecto
+          </button>
+          <button type="submit" className="neon-btn small-btn" disabled={saving}>
+            <Save size={18} />
+            {saving ? 'Guardando...' : 'Guardar Cambios'}
+          </button>
+        </div>
       </form>
     </div>
   );

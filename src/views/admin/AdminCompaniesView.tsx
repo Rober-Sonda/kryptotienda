@@ -122,11 +122,11 @@ const AdminCompaniesView: React.FC = () => {
         <h2>Gestión de Empresas (Partners)</h2>
         <div style={{ display: 'flex', gap: '10px' }}>
           {companies.length === 0 && (
-            <button className="admin-btn" style={{ background: 'var(--krypton-green)', border: 'none', color: '#000', fontWeight: 'bold' }} onClick={handleMigrate}>
+            <button className="neon-btn small-btn" style={{ background: 'var(--krypton-green)', border: 'none', color: '#000', fontWeight: 'bold' }} onClick={handleMigrate}>
               Migrar Empresas de Prueba
             </button>
           )}
-          <button className="admin-btn" onClick={openNewModal}>
+          <button className="neon-btn small-btn" onClick={openNewModal}>
             <Plus size={18} /> Agregar Empresa
           </button>
         </div>
@@ -181,10 +181,10 @@ const AdminCompaniesView: React.FC = () => {
                     </span>
                   </td>
                   <td>
-                    <button onClick={() => openEditModal(c)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', marginRight: '10px' }}>
+                    <button onClick={() => openEditModal(c)} className="icon-btn">
                       <Edit2 size={18} />
                     </button>
-                    <button onClick={() => handleDelete(c.id!)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                    <button onClick={() => handleDelete(c.id!)} className="icon-btn danger">
                       <Trash2 size={18} />
                     </button>
                   </td>
@@ -250,10 +250,10 @@ const AdminCompaniesView: React.FC = () => {
               </div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
-                <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'white', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="neon-btn small-btn cancel">
                   Cancelar
                 </button>
-                <button type="submit" className="admin-btn" disabled={uploadingImg}>
+                <button type="submit" className="neon-btn small-btn" disabled={uploadingImg}>
                   Guardar
                 </button>
               </div>

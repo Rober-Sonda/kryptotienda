@@ -113,28 +113,7 @@
   margin-right: 10px;
 }
 
-.admin-btn {
-  background-color: var(--krypton-green);
-  color: black;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: opacity 0.2s;
-}
 
-.admin-btn:hover {
-  opacity: 0.8;
-}
-
-.admin-btn.danger {
-  background-color: #ff4444;
-  color: white;
-}
 
 .admin-table {
   width: 100%;
@@ -237,20 +216,41 @@
   gap: 10px;
 }
 
-.upload-btn {
+/* Tab Buttons */
+.admin-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.admin-tab-btn {
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: bold;
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 15px;
-  background-color: var(--bg-dark);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  cursor: pointer;
-  color: var(--text-main);
-  transition: all 0.2s;
+  white-space: nowrap;
 }
 
-.upload-btn:hover {
-  border-color: var(--krypton-green);
-  color: var(--krypton-green);
+.admin-tab-btn:hover {
+  color: var(--text-main);
+  border-color: var(--text-main);
 }
+
+.admin-tab-btn.active {
+  color: var(--bg-dark);
+  background-color: var(--krypton-green);
+  border-color: var(--krypton-green);
+  box-shadow: 0 0 15px var(--krypton-green-glow);
+}
+
+

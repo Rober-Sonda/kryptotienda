@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useOrders, useOrderWhatsApp, type Order } from '../hooks/useOrders';
-import { Package, MessageCircle, Edit3, CheckCircle, XCircle } from 'lucide-react';
-import './Store.css';
+import { useClaims } from '../hooks/useClaims';
+import { Package, MessageCircle, Edit3, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import './StoreView.css';
 
 const STATUS_MAP: Record<string, { label: string, color: string }> = {
   pending: { label: 'Pendiente', color: '#f39c12' },
@@ -12,13 +13,24 @@ const STATUS_MAP: Record<string, { label: string, color: string }> = {
   cancelled: { label: 'Cancelado', color: '#e74c3c' }
 };
 
+const CLAIM_STATUS_MAP: Record<string, { label: string, color: string }> = {
+  open: { label: 'Reclamo Abierto', color: '#e74c3c' },
+  in_progress: { label: 'En Revisión', color: '#f39c12' },
+  resolved: { label: 'Resuelto', color: '#2ecc71' },
+  rejected: { label: 'Rechazado', color: '#7f8c8d' }
+};
+
 const MyOrdersView: React.FC = () => {
   const { currentUser } = useAuth();
   const { orders, loading, editOrderItems } = useOrders(currentUser?.uid);
+  const { claims, addClaim } = useClaims(currentUser?.uid);
   const { generateMessage } = useOrderWhatsApp();
 
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [editedItems, setEditedItems] = useState<any[]>([]);
+  
+  const [claimModalOrder, setClaimModalOrder] = useState<Order | null>(null);
+  const [claimReason, setClaimReason] = useState('');
 
   if (!currentUser) {
     return (
@@ -75,6 +87,34 @@ const MyOrdersView: React.FC = () => {
     }
   };
 
+  const handleOpenClaimModal = (order: Order) => {
+    setClaimModalOrder(order);
+    setClaimReason('');
+  };
+
+  const handleSubmitClaim = async () => {
+    if (!claimModalOrder || !claimModalOrder.id || !currentUser) return;
+    if (claimReason.trim().length < 10) {
+      alert("Por favor detalla más tu reclamo (mínimo 10 caracteres).");
+      return;
+    }
+    
+    try {
+      await addClaim({
+        orderNumber: claimModalOrder.orderNumber || claimModalOrder.id,
+        orderId: claimModalOrder.id,
+        customerId: currentUser.uid,
+        customerName: currentUser.displayName || claimModalOrder.customerName || 'Cliente',
+        reason: claimReason
+      });
+      alert("Tu reclamo ha sido enviado. Lo revisaremos a la brevedad.");
+      setClaimModalOrder(null);
+    } catch (error) {
+      console.error(error);
+      alert("Error al enviar el reclamo.");
+    }
+  };
+
   return (
     <div style={{ padding: '100px 20px', maxWidth: '800px', margin: '0 auto', minHeight: '80vh' }}>
       <h2 className="title-krypton" style={{ marginBottom: '30px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -91,12 +131,33 @@ const MyOrdersView: React.FC = () => {
             <div key={order.id} className="glass-card" style={{ padding: '20px', position: 'relative' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '15px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
                 <div>
-                  <h3 style={{ margin: '0 0 5px 0' }}>Pedido #{order.id?.substring(0, 8).toUpperCase()}</h3>
+                  <h3 style={{ margin: '0 0 5px 0' }}>Pedido #{order.orderNumber || order.id?.substring(0, 8).toUpperCase()}</h3>
                   <span style={{ fontSize: '0.9em', color: 'var(--text-muted)' }}>
                     {new Date(order.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  {(() => {
+                    const existingClaim = claims.find(c => c.orderId === order.id);
+                    if (existingClaim) {
+                      return (
+                        <span style={{ 
+                          backgroundColor: CLAIM_STATUS_MAP[existingClaim.status]?.color || '#555', 
+                          color: 'white', 
+                          padding: '4px 8px', 
+                          borderRadius: '12px', 
+                          fontSize: '0.85em',
+                          fontWeight: 'bold',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}>
+                          <AlertTriangle size={12} /> {CLAIM_STATUS_MAP[existingClaim.status]?.label}
+                        </span>
+                      );
+                    }
+                    return null;
+                  })()}
                   <span style={{ 
                     backgroundColor: STATUS_MAP[order.status]?.color || '#555', 
                     color: 'white', 
@@ -163,6 +224,16 @@ const MyOrdersView: React.FC = () => {
                         <Edit3 size={16} /> Editar Pedido
                       </button>
                     )}
+
+                    {!claims.find(c => c.orderId === order.id) && (
+                      <button 
+                        className="neon-btn small-btn" 
+                        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', background: 'transparent', border: '1px solid #e74c3c', color: '#e74c3c' }}
+                        onClick={() => handleOpenClaimModal(order)}
+                      >
+                        <AlertTriangle size={16} /> Iniciar Reclamo
+                      </button>
+                    )}
                   </div>
                   {order.wasEdited && (
                     <div style={{ marginTop: '10px', fontSize: '0.85em', color: '#f39c12', textAlign: 'center' }}>
@@ -175,6 +246,35 @@ const MyOrdersView: React.FC = () => {
           ))}
         </div>
       )}
+
+      {/* Claim Modal */}
+      {claimModalOrder && (
+        <div className="modal-overlay" onClick={() => setClaimModalOrder(null)}>
+          <div className="modal-content glass-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '500px', width: '90%' }}>
+            <h3 style={{ marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '10px', color: '#e74c3c' }}>
+              <AlertTriangle /> Iniciar Reclamo
+            </h3>
+            <p style={{ marginBottom: '15px', color: 'var(--text-muted)' }}>
+              Pedido #{claimModalOrder.orderNumber || claimModalOrder.id?.substring(0, 8).toUpperCase()}<br/>
+              Por favor, detalla el problema con tu pedido de manera protocolar. Nuestro equipo o el sistema automatizado lo revisará a la brevedad.
+            </p>
+            <textarea
+              value={claimReason}
+              onChange={(e) => setClaimReason(e.target.value)}
+              placeholder="Ej: Faltó un artículo en el paquete, el talle no corresponde, etc."
+              rows={4}
+              style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-dark)', color: 'white', marginBottom: '20px' }}
+            />
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              <button className="neon-btn small-btn" style={{ background: 'transparent' }} onClick={() => setClaimModalOrder(null)}>Cancelar</button>
+              <button className="neon-btn small-btn" style={{ background: '#e74c3c', color: 'white', border: 'none' }} onClick={handleSubmitClaim}>
+                Enviar Reclamo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

@@ -28,8 +28,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, offe
         <div className="glass-shield"></div>
         {mockupBg ? (
           <div className="virtual-mockup-container">
-            <img src={`/mockups/mockup-tshirt-${mockupBg}.png`} alt="T-Shirt Mockup" className={`mockup-base ${mockupBg}`} draggable="false" />
-            <img src={image} alt={title} className="mockup-design no-drag" draggable="false" onContextMenu={(e) => e.preventDefault()} />
+            <img src={`/mockups/mockup-tshirt-${mockupBg}.png`} alt="T-Shirt Mockup" className={`mockup-base ${mockupBg}`} draggable="false" loading="lazy" />
+            <img src={image} alt={title} className="mockup-design no-drag" draggable="false" loading="lazy" onContextMenu={(e) => e.preventDefault()} />
           </div>
         ) : (
           <img 
@@ -37,6 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, title, image, price, offe
             alt={title} 
             className="product-image no-drag"
             draggable="false"
+            loading="lazy"
             onContextMenu={(e) => e.preventDefault()}
           />
         )}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Package, Tags, Settings, Database, ArrowLeft, Image as ImageIcon, ShoppingCart, DollarSign, Bot, Briefcase } from 'lucide-react';
+import { Package, Tags, Settings, Database, ArrowLeft, Image as ImageIcon, ShoppingCart, DollarSign, Bot, Briefcase, ShieldAlert } from 'lucide-react';
 import './Admin.css';
 
 const AdminLayout: React.FC = () => {
@@ -10,7 +10,9 @@ const AdminLayout: React.FC = () => {
     <div className="admin-layout">
       <aside className="admin-sidebar">
         <div className="admin-logo">
-          <h2 className="title-krypton" style={{ fontSize: '1.5rem', margin: 0 }}>KRYPTON ADMIN</h2>
+          <h2 className="title-krypton" style={{ fontSize: '1.5rem', margin: 0 }}>
+            KRYPTON <span style={{ color: '#ffffff' }}>ADMIN</span>
+          </h2>
         </div>
         <nav className="admin-nav">
           <Link to="/admin/products" className={`admin-link ${location.pathname.includes('/products') ? 'active' : ''}`}>
@@ -40,6 +42,10 @@ const AdminLayout: React.FC = () => {
           <Link to="/admin/orders" className={`admin-link ${location.pathname.includes('/orders') ? 'active' : ''}`}>
             <ShoppingCart size={20} />
             Pedidos
+          </Link>
+          <Link to="/admin/claims" className={`admin-link ${location.pathname.includes('/claims') ? 'active' : ''}`}>
+            <ShieldAlert size={20} />
+            Reclamos
           </Link>
           <Link to="/admin/finances" className={`admin-link ${location.pathname.includes('/finances') ? 'active' : ''}`}>
             <DollarSign size={20} />

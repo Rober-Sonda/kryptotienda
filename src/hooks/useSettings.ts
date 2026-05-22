@@ -34,7 +34,8 @@ export const useSettings = () => {
     const docRef = doc(db, 'config', 'footer');
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
       if (docSnap.exists()) {
-        setSettings(docSnap.data() as FooterSettings);
+        const dbData = docSnap.data() as Partial<FooterSettings>;
+        setSettings({ ...defaultSettings, ...dbData });
       } else {
         setSettings(defaultSettings);
       }

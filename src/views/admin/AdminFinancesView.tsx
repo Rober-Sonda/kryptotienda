@@ -115,7 +115,7 @@ const AdminFinancesView: React.FC = () => {
               <label>Descripción</label>
               <input type="text" placeholder="Ej: Compra de cajas" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} required />
             </div>
-            <button type="submit" className="admin-btn" style={{ width: '100%', marginTop: '10px' }}>Registrar Movimiento</button>
+            <button type="submit" className="neon-btn small-btn" style={{ width: '100%', marginTop: '10px' }}>Registrar Movimiento</button>
           </form>
         </div>
 
@@ -152,7 +152,7 @@ const AdminFinancesView: React.FC = () => {
                     {t.type === 'expense' ? '-' : '+'}${t.amount.toFixed(2)}
                   </td>
                   <td>
-                    <button onClick={() => { if(window.confirm('¿Eliminar este registro?')) removeTransaction(t.id!) }} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                    <button onClick={() => { if(window.confirm('¿Eliminar este registro?')) removeTransaction(t.id!) }} className="icon-btn danger">
                       <Trash2 size={18} />
                     </button>
                   </td>

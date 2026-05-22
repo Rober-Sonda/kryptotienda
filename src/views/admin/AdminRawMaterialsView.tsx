@@ -70,7 +70,7 @@ const AdminRawMaterialsView: React.FC = () => {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2>Inventario de Materias Primas / Insumos</h2>
-        <button className="admin-btn" onClick={openNewModal}>
+        <button className="neon-btn small-btn" onClick={openNewModal}>
           <Plus size={18} /> Nuevo Insumo
         </button>
       </div>
@@ -94,9 +94,12 @@ const AdminRawMaterialsView: React.FC = () => {
               return (
                 <tr key={m.id}>
                   <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Package size={16} />
-                      {m.name}
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Package size={16} />
+                        <strong>{m.name}</strong>
+                      </div>
+                      <span style={{ fontSize: '0.75em', color: 'var(--text-muted)', fontFamily: 'monospace', marginLeft: '24px' }}>ID: {m.id}</span>
                     </div>
                   </td>
                   <td>{m.category}</td>
@@ -115,10 +118,10 @@ const AdminRawMaterialsView: React.FC = () => {
                     )}
                   </td>
                   <td>
-                    <button onClick={() => openEditModal(m)} style={{ background: 'none', border: 'none', color: 'var(--text-light)', cursor: 'pointer', marginRight: '10px' }}>
+                    <button onClick={() => openEditModal(m)} className="icon-btn">
                       <Edit2 size={18} />
                     </button>
-                    <button onClick={() => m.id && handleDelete(m.id)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer' }}>
+                    <button onClick={() => m.id && handleDelete(m.id)} className="icon-btn danger">
                       <Trash2 size={18} />
                     </button>
                   </td>
@@ -172,10 +175,10 @@ const AdminRawMaterialsView: React.FC = () => {
               </div>
 
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px', justifyContent: 'flex-end' }}>
-                <button type="button" onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: '1px solid var(--border-color)', color: 'var(--text-main)', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer' }}>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="neon-btn small-btn cancel">
                   Cancelar
                 </button>
-                <button type="submit" className="admin-btn">Guardar Insumo</button>
+                <button type="submit" className="neon-btn small-btn">Guardar Insumo</button>
               </div>
             </form>
           </div>

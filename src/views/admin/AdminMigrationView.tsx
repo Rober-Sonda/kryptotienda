@@ -98,17 +98,17 @@ const AdminMigrationView: React.FC = () => {
         </p>
 
         <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-          <button className="admin-btn" onClick={migrateCategories} disabled={isMigrating}>
+          <button className="neon-btn small-btn" onClick={migrateCategories} disabled={isMigrating}>
             <Database size={18} />
             {isMigrating ? 'Migrando Categorías...' : '1. Inyectar Categorías'}
           </button>
           
-          <button className="admin-btn" onClick={handleMigrate} disabled={migrating}>
+          <button className="neon-btn small-btn" onClick={handleMigrate} disabled={migrating}>
             <Database size={18} />
             {migrating ? `Migrando Productos... ${progress}%` : '2. Migrar Productos'}
           </button>
 
-          <button className="admin-btn" onClick={handleMigrateFacilities} disabled={migratingFac}>
+          <button className="neon-btn small-btn" onClick={handleMigrateFacilities} disabled={migratingFac}>
             <Database size={18} />
             {migratingFac ? `Migrando Instalaciones... ${facProgress}%` : '3. Migrar Instalaciones'}
           </button>

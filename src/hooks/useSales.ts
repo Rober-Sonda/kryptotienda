@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, query, onSnapshot, addDoc, doc, updateDoc, getDoc, runTransaction, orderBy } from 'firebase/firestore';
+import { collection, query, onSnapshot, doc, runTransaction, orderBy } from 'firebase/firestore';
 
 export interface SaleItemRawMaterial {
   rawMaterialId: string;
